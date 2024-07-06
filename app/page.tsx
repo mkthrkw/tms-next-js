@@ -2,7 +2,7 @@ import Image from "next/image";
 import backgroundImage from "@/public/background_neko.jpg";
 import Link from "next/link";
 
-export default function Home() {
+export default function Page() {
 
   return (
     <>

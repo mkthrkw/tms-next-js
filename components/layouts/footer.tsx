@@ -3,5 +3,5 @@ export default function Footer() {
     <footer className="footer footer-center text-base-content p-1">
       <p>mkthrkw</p>
     </footer>
-  )
+  );
 }

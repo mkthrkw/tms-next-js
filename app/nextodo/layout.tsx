@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Header from "@/components/layouts/header";
-import Footer from "@/components/layouts/footer";
-import Aside from "@/components/layouts/aside";
+import Header from "@/components/layouts/Header";
+import Footer from "@/components/layouts/Footer";
+import Aside from "@/components/layouts/Aside";
 
 export const metadata: Metadata = {
     title: "Nextodo",

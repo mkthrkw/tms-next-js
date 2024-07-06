@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Aside() {
   return (
@@ -8,5 +8,5 @@ export default function Aside() {
         <li><Link href="/nextodo/projectId2">project2</Link></li>
       </ul>
     </aside>
-  )
+  );
 }
