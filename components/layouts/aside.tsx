@@ -1,12 +1,25 @@
+import fetchGet from '@/util/fetch/get';
 import Link from 'next/link';
+import AsideLinkList from './AsideLinkList';
 
-export default function Aside() {
+export default async function Aside() {
+
+  const ProjectList = async () => {
+    try{
+      const projects = await fetchGet({
+        url: '/tms/projects/',
+        hasToken: true,
+      });
+      return <AsideLinkList projects={projects}/>;
+    }catch(e){
+      console.error(e);
+    }
+  }
+
   return (
-    <aside className="menu px-2 py-4 w-48 min-h-full bg-base-200">
-      <ul>
-        <li><Link href="/nextodo/projectId1">project1</Link></li>
-        <li><Link href="/nextodo/projectId2">project2</Link></li>
-      </ul>
+    <aside className="menu px-2 py-8 w-48 min-h-full bg-base-200">
+      <Link href="/nextodo" className="text-xl text-center mb-8 lg:hidden">Nextodo</Link>
+      <ProjectList/>
     </aside>
   );
 }

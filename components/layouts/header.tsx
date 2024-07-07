@@ -10,7 +10,7 @@ export default function Header({drawerId}:{drawerId:string}) {
         </label>
       </div>
       {/* Logo */}
-      <Link href="/" className="flex-1 px-2 mx-2 text-xl justify-center lg:justify-start">Nextodo</Link>
+      <Link href="/nextodo" className="flex-1 px-2 mx-2 text-xl justify-center lg:justify-start">Nextodo</Link>
       {/* Right menu */}
       <div className="flex-none">
         <Link href="/nextodo/setting" className='btn btn-sm btn-ghost'>
