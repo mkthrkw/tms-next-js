@@ -1,5 +1,5 @@
-import LoginForm from '@/features/auth/login/Form';
-import RefreshLoginModal from '@/features/auth/refresh-login/Modal';
+import LoginForm from '@/features/auth/Form';
+import RefreshLoginModal from '@/features/auth/Modal';
 
 export default function Page() {
   return (
