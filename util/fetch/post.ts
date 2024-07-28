@@ -19,6 +19,7 @@ type FetchProps = {
 
 export default async function fetchPost({ url, hasToken = false, params = undefined, customErrorMessage = {} }: Props) {
   
+  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
   let fetchProps: FetchProps = {
     method: 'POST',
     headers: {
@@ -32,7 +33,7 @@ export default async function fetchPost({ url, hasToken = false, params = undefi
     fetchProps.body = JSON.stringify(params);
   };
 
-  const response = await fetch(process.env.BACKEND_API_SERVER_URL + url, fetchProps);
+  const response = await fetch(fetchUrl, fetchProps);
   if (!response.ok) {
     if(response.status in customErrorMessage) {
       throw new Error(customErrorMessage[response.status]);

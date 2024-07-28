@@ -1,25 +1,16 @@
-import fetchGet from '@/util/fetch/get';
-import Link from 'next/link';
-import AsideLinkList from './AsideLinkList';
+import CreateForm from '@/features/projects/CreateForm';
+import LinkList from './aside-parts/LinkList';
+import Logo from './aside-parts/Logo';
+import { getProjects } from '@/features/projects/actions';
 
 export default async function Aside() {
-
-  const ProjectList = async () => {
-    try{
-      const projects = await fetchGet({
-        url: '/tms/projects/',
-        hasToken: true,
-      });
-      return <AsideLinkList projects={projects}/>;
-    }catch(e){
-      console.error(e);
-    }
-  }
-
   return (
-    <aside className="menu px-2 py-8 w-48 min-h-full bg-base-200">
-      <Link href="/nextodo" className="text-xl text-center mb-8 lg:hidden">Nextodo</Link>
-      <ProjectList/>
+    <aside className="menu px-2 py-8 w-48 min-h-full bg-base-200 justify-between">
+      <div>
+        <Logo />
+        <LinkList projects={await getProjects()} />
+      </div>
+      <CreateForm/>
     </aside>
   );
 }

@@ -11,10 +11,9 @@ export default async function Page() {
       });
       return await projects.map((project: any) => (
         <LinkCardWithAvatar
-          type="page"
+          key={project.id}
           object={{
             href: `/nextodo/${project.id}`,
-            key: project.id,
             title: project.name,
             text: project.description,
             url: project.image_url
@@ -22,7 +21,7 @@ export default async function Page() {
         />
       ));
     }catch(e){
-      console.error(e);
+      return <p className="text-error">エラーが発生しました。</p>;
     }
   }
 

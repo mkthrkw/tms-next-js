@@ -1,6 +1,6 @@
 "use client";
-import LinkCardWithAvatar from '../cards/LinkCardWithAvatar';
 import { usePathname } from 'next/navigation';
+import AsideLinkCardWithAvatar from '@/components/cards/AsideLinkCardWithAvatar';
 
 type Project = {
   id: string,
@@ -8,25 +8,22 @@ type Project = {
   description: string,
   image_url: string
 }
-
 type Props = {
   projects: Project[]
 }
 
-export default function AsideLinkList({projects} : Props) {
+export default function LinkList({projects} : Props) {
   const pathName = usePathname();
 
   return (
     <>
       {projects.map((project: Project) => (
-          <LinkCardWithAvatar
+          <AsideLinkCardWithAvatar
             key={project.id}
-            type="aside"
             pathname={pathName}
             object={{
               href: `/nextodo/${project.id}`,
               title: project.name,
-              text: project.description,
               url: project.image_url
             }}
           />
