@@ -20,7 +20,7 @@ export default function AsideLinkCardWithAvatar({pathname, object} : Props) {
       className={"flex-row card hover:bg-base-content/50 bg-base-content/20 rounded-xl mb-4 items-center p-2 min-w-[10rem]" + addWrapClass}
     >
       <div className="avatar">
-        <div className="mask mask-squircle w-10">
+        <div className="mask mask-squircle w-8">
           <img src={object.url} />
         </div>
       </div>
