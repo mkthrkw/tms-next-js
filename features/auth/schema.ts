@@ -10,4 +10,4 @@ export const authSchema = z.object({
 });
 
 
-export type AuthSchema = z.infer<typeof authSchema>;
+export type AuthSchemaType = z.infer<typeof authSchema>;

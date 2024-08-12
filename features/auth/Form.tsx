@@ -1,10 +1,10 @@
 'use client';
 
-import { login, redirectToNextPath, State } from "./actions";
+import { login, redirectToNextPath, ActionState } from "./actions";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthSchema, authSchema } from "./schema";
+import { AuthSchemaType, authSchema } from "./schema";
 
 export default function LoginForm() {
 
@@ -12,15 +12,15 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm<AuthSchema>(
+  } = useForm<AuthSchemaType>(
     {
       mode: 'onBlur',
       resolver: zodResolver(authSchema)
     }
   );
 
-  const onSubmit = async (data: AuthSchema) => {
-    const initialState: State = {
+  const onSubmit = async (data: AuthSchemaType) => {
+    const initialState: ActionState = {
       state: 'pending',
       message: '',
     };

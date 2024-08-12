@@ -5,14 +5,14 @@ import { setToken, getRefreshToken, setRefreshToken, removeToken, removeRefreshT
 import { getLoginCustomErrorMessage, getRefreshLoginCustomErrorMessage } from "@/util/fetch/error-message";
 import { fetchPost } from "@/util/fetch/methods";
 import { redirect } from "next/navigation";
-import { AuthSchema } from "./schema";
+import { AuthSchemaType } from "./schema";
 
-export type State = {
+export type ActionState = {
   state: 'pending' | 'resolved' | 'rejected', // pending:未処理 | resolved:成功 | rejected:失敗
   message: string,
 };
 
-export async function login(prevState: State ,data: AuthSchema) {
+export async function login(prevState: ActionState ,data: AuthSchemaType) {
   try {
     const response = await fetchPost({
       url: '/auth/token/',
@@ -34,7 +34,7 @@ export async function login(prevState: State ,data: AuthSchema) {
 }
 
 
-export async function refreshLogin(prevState: State) {
+export async function refreshLogin(prevState: ActionState) {
 
   const refreshToken = getRefreshToken();
   const refreshLoginCustomErrorMessage = getRefreshLoginCustomErrorMessage();
@@ -64,7 +64,7 @@ export async function refreshLogin(prevState: State) {
   }
 }
 
-export async function logout(prevState: State) {
+export async function logout(prevState: ActionState) {
   removeToken();
   removeRefreshToken();
   redirect('/login');

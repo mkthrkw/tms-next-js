@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { redirectToNextPath, refreshLogin, State } from "./actions";
+import { redirectToNextPath, refreshLogin, ActionState } from "./actions";
 import CommonModal from "@/components/modals/CommonModal";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ export default function RefreshLoginModal() {
   const { handleSubmit, formState:{isSubmitting} } = useForm();
 
   const onSubmit = async () => {
-    const initialState: State = {
+    const initialState: ActionState = {
       state: 'pending',
       message: '',
     };
