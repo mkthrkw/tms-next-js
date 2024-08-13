@@ -1,6 +1,6 @@
 import 'server-only';
 import { getToken } from '../cookies/token';
-
+import exp from 'constants';
 
 export type Props = {
   url: string,
@@ -19,22 +19,15 @@ export type FetchProps = {
 };
 
 
-// ===========================================
-//                   Get
-// ===========================================
-export async function fetchGet({ url, hasToken = false, customErrorMessage = {} }: Props) {
-  
-  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
-  let fetchProps: FetchProps = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  if (hasToken) {
-    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
-  };
 
+// ===========================================
+//                   Common
+// ===========================================
+async function fetchCommon(
+  fetchUrl:string,
+  fetchProps:FetchProps,
+  customErrorMessage: { [key: number]: string }
+) {
   const response = await fetch(fetchUrl, fetchProps);
   if (!response.ok) {
     if(response.status in customErrorMessage) {
@@ -49,10 +42,36 @@ export async function fetchGet({ url, hasToken = false, customErrorMessage = {} 
 
 
 // ===========================================
+//                   Get
+// ===========================================
+export async function fetchGet({
+  url,
+  hasToken = false,
+  customErrorMessage = {},
+}: Props) {
+  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
+  let fetchProps: FetchProps = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  if (hasToken) {
+    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
+  };
+  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
+}
+
+
+// ===========================================
 //                   Post
 // ===========================================
-export async function fetchPost({ url, hasToken = false, params = undefined, customErrorMessage = {} }: Props) {
-  
+export async function fetchPost({
+  url,
+  hasToken = false,
+  params = undefined,
+  customErrorMessage = {},
+}: Props) {
   let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
   let fetchProps: FetchProps = {
     method: 'POST',
@@ -66,25 +85,44 @@ export async function fetchPost({ url, hasToken = false, params = undefined, cus
   if (params) {
     fetchProps.body = JSON.stringify(params);
   };
+  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
+}
 
-  const response = await fetch(fetchUrl, fetchProps);
-  if (!response.ok) {
-    if(response.status in customErrorMessage) {
-      throw new Error(customErrorMessage[response.status]);
-    };
-    throw new Error(response.statusText);
+
+// ===========================================
+//                  Patch
+// ===========================================
+export async function fetchPatch({
+  url,
+  hasToken = false,
+  params = undefined,
+  customErrorMessage = {},
+}: Props) {
+  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
+  let fetchProps: FetchProps = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   };
-  if(response.body){
-    return await response.json();
-  }
+  if (hasToken) {
+    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
+  };
+  if (params) {
+    fetchProps.body = JSON.stringify(params);
+  };
+  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
 }
 
 
 // ===========================================
 //                  Delete
 // ===========================================
-export async function fetchDelete({ url, hasToken = false, customErrorMessage = {} }: Props) {
-  
+export async function fetchDelete({
+  url,
+  hasToken = false,
+  customErrorMessage = {},
+}: Props) {
   let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
   let fetchProps: FetchProps = {
     method: 'DELETE',
@@ -95,15 +133,5 @@ export async function fetchDelete({ url, hasToken = false, customErrorMessage = 
   if (hasToken) {
     fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
   };
-
-  const response = await fetch(fetchUrl, fetchProps);
-  if (!response.ok) {
-    if(response.status in customErrorMessage) {
-      throw new Error(customErrorMessage[response.status]);
-    };
-    throw new Error(response.statusText);
-  };
-  if(response.body){
-    return response.json();
-  }
+  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
 }

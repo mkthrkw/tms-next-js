@@ -1,23 +1,68 @@
 'use server';
 
-import fetchGet from "@/util/fetch/get";
-import fetchPost from "@/util/fetch/post";
+import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
+import { ActionState } from "./type";
+import { ProjectSchemaType } from "./schema";
 
-export async function getProjects() {
-    try{
-      return await fetchGet({
-        url: '/tms/projects',
-        hasToken: true,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+export async function createProject(prevState: ActionState, data: ProjectSchemaType) {
+  try {
+    await fetchPost({
+      url: '/tms/projects/',
+      hasToken: true,
+      params: {
+        name: data.name,
+        description: data.description,
+      },
+    });
+    prevState.state = 'resolved';
+    return prevState;
+  } catch (error: any) {
+    prevState.message = error.message ?? 'エラーが発生しました。';
+    prevState.state = 'rejected';
+    return prevState;
+  }
 }
 
-export async function getProjectDetail(projectId: string) {
+export async function updateProject(prevState: ActionState, projectId:String, data: ProjectSchemaType) {
+  try {
+    await fetchPatch({
+      url: `/tms/projects/${projectId}/`,
+      hasToken: true,
+      params: {
+        name: data.name,
+        description: data.description,
+      },
+    });
+    prevState.state = 'resolved';
+    return prevState;
+  } catch (error: any) {
+    prevState.message = error.message ?? 'エラーが発生しました。';
+    prevState.state = 'rejected';
+    return prevState;
+  }
+}
+
+
+export async function deleteProject(prevState: ActionState, projectId: string) {
+  try {
+    await fetchDelete({
+      url: `/tms/projects/${projectId}`,
+      hasToken: true,
+    });
+    prevState.state = 'resolved';
+    return prevState;
+  } catch (error: any) {
+    prevState.message = error.message ?? 'エラーが発生しました。';
+    prevState.state = 'rejected';
+    return prevState;
+  }
+}
+
+
+export async function getProjects() {
   try{
     return await fetchGet({
-      url: '/tms/projects/' + projectId + '/',
+      url: '/tms/projects',
       hasToken: true,
     });
   } catch (error) {
@@ -25,26 +70,13 @@ export async function getProjectDetail(projectId: string) {
   }
 }
 
-export type State = {
-  message: string,
-};
-
-export async function createProject(prevState: State, formData: FormData): Promise<State> {
-  try {
-    await fetchPost({
-      url: '/tms/projects/',
+export async function getProjectDetail(projectId: string) {
+  try{
+    return await fetchGet({
+      url: `/tms/projects/${projectId}/`,
       hasToken: true,
-      params: {
-        name: formData.get('name'),
-        description: formData.get('description'),
-      },
-      customErrorMessage: {},
     });
-    prevState.message = 'success';
-    return prevState;
-  }catch (error) {
+  } catch (error) {
     console.error(error);
-    prevState.message = 'error';
-    return prevState;
   }
 }
