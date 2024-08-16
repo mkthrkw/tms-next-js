@@ -1,4 +1,12 @@
-export default function HamburgerMenuIcon({width, height, addClass='fill-base-content stroke-base-content'}: {width: number, height: number, addClass?: string}) {
+export default function HamburgerMenuIcon({
+  width,
+  height,
+  addClass='fill-base-content stroke-base-content'
+}:{
+  width: number,
+  height: number,
+  addClass?: string
+}) {
   return (
     <div>
       <svg className={addClass} width={width} height={height} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

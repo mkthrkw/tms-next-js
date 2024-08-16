@@ -46,7 +46,7 @@ export default function LoginForm() {
             placeholder="email"
             className="input input-bordered w-full"
           />
-          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+          {errors.email && <p className="text-error text-xs mt-1">{errors.email.message}</p>}
         </div>
         <div className="form-control">
           <label className="label">
@@ -58,7 +58,7 @@ export default function LoginForm() {
             placeholder="password"
             className="input input-bordered w-full"
           />
-          {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+          {errors.password && <p className="text-error text-xs mt-1">{errors.password.message}</p>}
         </div>
         <div className="form-control mt-6">
           <button className="btn btn-secondary" disabled={isSubmitting}>Login</button>
