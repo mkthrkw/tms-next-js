@@ -1,5 +1,5 @@
 import Image from "next/image";
-import backgroundImage from "@/public/background_neko.jpg";
+import backgroundImage from "@/public/images/home/background_neko.jpg";
 import Link from "next/link";
 
 export default function Page() {

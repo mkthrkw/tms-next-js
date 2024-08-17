@@ -4,6 +4,7 @@ import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/metho
 import { ActionState } from "./type";
 import { ProjectSchemaType } from "./schema";
 
+
 export async function createProject(prevState: ActionState, data: ProjectSchemaType) {
   try {
     await fetchPost({
@@ -23,6 +24,7 @@ export async function createProject(prevState: ActionState, data: ProjectSchemaT
   }
 }
 
+
 export async function updateProject(prevState: ActionState, projectId:String, data: ProjectSchemaType) {
   try {
     await fetchPatch({
@@ -31,6 +33,25 @@ export async function updateProject(prevState: ActionState, projectId:String, da
       params: {
         name: data.name,
         description: data.description,
+      },
+    });
+    prevState.state = 'resolved';
+    return prevState;
+  } catch (error: any) {
+    prevState.message = error.message ?? 'エラーが発生しました。';
+    prevState.state = 'rejected';
+    return prevState;
+  }
+}
+
+
+export async function updateProjectAvatar(prevState: ActionState, projectId:String, imageId: String) {
+  try {
+    await fetchPatch({
+      url: `/tms/projects/${projectId}/`,
+      hasToken: true,
+      params: {
+        image_url: imageId,
       },
     });
     prevState.state = 'resolved';
