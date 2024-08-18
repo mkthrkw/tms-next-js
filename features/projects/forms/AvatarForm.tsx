@@ -41,7 +41,7 @@ export default function AvatarForm({projectDetail}:{projectDetail:ProjectDetail}
     }
   }
 
-  const uploadAvatar = async (public_id: String) => {
+  const uploadAvatar = async (public_id: string) => {
       const initialState:ActionState = {
         state: 'pending',
         message: '',

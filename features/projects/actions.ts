@@ -25,7 +25,7 @@ export async function createProject(prevState: ActionState, data: ProjectSchemaT
 }
 
 
-export async function updateProject(prevState: ActionState, projectId:String, data: ProjectSchemaType) {
+export async function updateProject(prevState: ActionState, projectId:string, data: ProjectSchemaType) {
   try {
     await fetchPatch({
       url: `/tms/projects/${projectId}/`,
@@ -45,7 +45,7 @@ export async function updateProject(prevState: ActionState, projectId:String, da
 }
 
 
-export async function updateProjectAvatar(prevState: ActionState, projectId:String, imageId: String) {
+export async function updateProjectAvatar(prevState: ActionState, projectId: string, imageId: string) {
   try {
     await fetchPatch({
       url: `/tms/projects/${projectId}/`,
