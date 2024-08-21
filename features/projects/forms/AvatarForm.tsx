@@ -1,107 +1,81 @@
 "use client";
 
 import { ActionState, ProjectDetail } from '../type'
-import {
-  CldImage,
-  CldUploadWidget,
-  CldUploadWidgetPropsChildren,
-  CloudinaryUploadWidgetError,
-  CloudinaryUploadWidgetResults
-} from 'next-cloudinary';
 import CameraIcon from '@/components/icons/svg/CameraIcon';
 import { toast } from 'react-toastify';
 import { updateProjectAvatar } from '../actions';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import defaultImg from '@/public/images/project/default.jpeg';
+import { useEffect, useRef, useState } from 'react';
+import { CldImage } from 'next-cloudinary';
 
 export default function AvatarForm({projectDetail}:{projectDetail:ProjectDetail}) {
 
   const router = useRouter();
-  
-  const AvatarImage = () => {
-    if (projectDetail.image_url){
-      return (
-        <CldImage
-          src={projectDetail.image_url} // Use this sample image or upload your own via the Media Explorer
-          width="150" // Transform the image: auto-crop to square aspect_ratio
-          height="150"
-          alt='avatar'
-        />
-      );
-    }else{
-      return (
-        <Image
-          src={defaultImg}
-          width="150"
-          height="150"
-          alt="avatar"
-        />
-      );
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [imageSrc, setImageSrc] = useState<string | undefined>(defaultImg.src);
+
+  useEffect(() => {
+    if(projectDetail.image_url){
+      setImageSrc(projectDetail.image_url);
+    }
+  }, [projectDetail.image_url]);
+
+  const uploadAvatar = async (fileString: string) => {
+    const initialState:ActionState = {
+      state: 'pending',
+      message: '',
+    }
+    const result = await updateProjectAvatar(initialState, projectDetail.id, fileString);
+    if(result.state === 'resolved') {
+      toast.success('Update projectAvatar success');
+      router.refresh();
+    }
+    if (result.state === 'rejected') {
+      toast.error(result.message);
     }
   }
 
-  const uploadAvatar = async (public_id: string) => {
-      const initialState:ActionState = {
-        state: 'pending',
-        message: '',
+  const handleChange = async () => {
+    const file = inputRef.current?.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if(!reader.result){
+        toast.error('ファイルの読み込みに失敗しました。');
+        return;
       }
-      const result = await updateProjectAvatar(initialState, projectDetail.id, public_id);
-      if(result.state === 'resolved') {
-        toast.success('Update projectAvatar success');
-        router.refresh();
-      }
-      if (result.state === 'rejected') {
-        toast.error(result.message);
-      }
+      uploadAvatar(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   }
 
-  const onSuccessHandler = (results:CloudinaryUploadWidgetResults)  => {
-    if(results.info && typeof results.info === 'object' && 'public_id' in results.info){
-      console.log('upload success:', results);
-      uploadAvatar(results.info.public_id);
-    }else{
-      console.log('something wrong:', results);
-    }
-  }
-  const onErrorHandler = (error: CloudinaryUploadWidgetError) => {
-    if (typeof error === 'object' && error?.statusText) {
-      toast.error(error.statusText);
-    } else {
-      console.error(error);
-    }
-  }
-
-  const widgetChildren = ({ open }: CldUploadWidgetPropsChildren) => {
-    return (
-      <button
-        onClick={() => open()}
-        className="btn btn-xs text-sm hover:underline w-11 h-11 rounded-full bg-slate-700/70 hover:bg-slate-500/70"
-      >
-        <CameraIcon width={24} height={24} addClass='fill-slate-400'/>
-      </button>
-    );
-  }
-  
   return (
     <div className='text-center'>
       <div className="avatar">
         <div className="w-32 rounded-full">
-          <AvatarImage />
+          <img
+            src={imageSrc}
+            width="150"
+            height="150"
+            alt="avatar"
+          />
         </div>
       </div>
       <div className='relative left-10 bottom-8'>
-        <CldUploadWidget
-          signatureEndpoint="/api/sign-cloudinary-params"
-          uploadPreset="tms-app"
-          onSuccess={onSuccessHandler}
-          onError={onErrorHandler}
-          onQueuesEnd={(results, { widget }) => {
-            widget.close();
-          }}
+        <div
+          onClick={() => inputRef.current?.click()}
+          className="btn w-11 h-11 rounded-full bg-slate-700/70 hover:bg-slate-500/70"
         >
-          {widgetChildren}
-        </CldUploadWidget>
+          <CameraIcon width={24} height={24} addClass='fill-slate-400'/>
+        </div>
+        <input
+          type="file"
+          className='hidden'
+          ref={inputRef}
+          onChange={handleChange}
+        />
       </div>
     </div>
   )

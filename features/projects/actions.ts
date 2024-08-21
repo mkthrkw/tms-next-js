@@ -3,6 +3,7 @@
 import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
 import { ActionState } from "./type";
 import { ProjectSchemaType } from "./schema";
+import { uploadImage } from "@/util/cloudinary/actions";
 
 
 export async function createProject(prevState: ActionState, data: ProjectSchemaType) {
@@ -45,13 +46,14 @@ export async function updateProject(prevState: ActionState, projectId:string, da
 }
 
 
-export async function updateProjectAvatar(prevState: ActionState, projectId: string, imageId: string) {
+export async function updateProjectAvatar(prevState: ActionState, projectId: string, fileData: string) {
   try {
+    const results = await uploadImage(fileData, projectId);
     await fetchPatch({
       url: `/tms/projects/${projectId}/`,
       hasToken: true,
       params: {
-        image_url: imageId,
+        image_url: results.secure_url,
       },
     });
     prevState.state = 'resolved';
