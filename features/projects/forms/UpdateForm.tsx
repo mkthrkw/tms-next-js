@@ -22,12 +22,12 @@ export default function ProjectUpdateForm(
   });
   const router = useRouter();
 
-  const onSubmit = async (data: ProjectSchemaType) => {
+  const onSubmit = async (inputValues: ProjectSchemaType) => {
     const initialState:ActionState = {
       state: 'pending',
       message: '',
     }
-    const result = await updateProject(initialState, projectDetail.id, data);
+    const result = await updateProject(initialState, projectDetail.id, inputValues);
     if(result.state === 'resolved') {
       toast.success('Update project success');
       router.refresh();

@@ -23,12 +23,12 @@ export default function ProjectCreateForm() {
   const router = useRouter();
   const dialog = useRef<HTMLDialogElement>(null);
 
-  const onSubmit = async (data: ProjectSchemaType) => {
+  const onSubmit = async (inputValues: ProjectSchemaType) => {
     const initialState:ActionState = {
       state: 'pending',
       message: '',
     }
-    const result =  await createProject(initialState, data);
+    const result =  await createProject(initialState, inputValues);
     if(result.state === 'resolved') {
       toast.success('Create project success');
       router.refresh();

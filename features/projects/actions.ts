@@ -6,14 +6,14 @@ import { ProjectSchemaType } from "./schema";
 import { uploadImage } from "@/util/cloudinary/actions";
 
 
-export async function createProject(prevState: ActionState, data: ProjectSchemaType) {
+export async function createProject(prevState: ActionState, inputValues: ProjectSchemaType) {
   try {
     await fetchPost({
       url: '/tms/projects/',
       hasToken: true,
       params: {
-        name: data.name,
-        description: data.description,
+        name: inputValues.name,
+        description: inputValues.description,
       },
     });
     prevState.state = 'resolved';
@@ -26,14 +26,14 @@ export async function createProject(prevState: ActionState, data: ProjectSchemaT
 }
 
 
-export async function updateProject(prevState: ActionState, projectId:string, data: ProjectSchemaType) {
+export async function updateProject(prevState: ActionState, projectId:string, inputValues: ProjectSchemaType) {
   try {
     await fetchPatch({
       url: `/tms/projects/${projectId}/`,
       hasToken: true,
       params: {
-        name: data.name,
-        description: data.description,
+        name: inputValues.name,
+        description: inputValues.description,
       },
     });
     prevState.state = 'resolved';
