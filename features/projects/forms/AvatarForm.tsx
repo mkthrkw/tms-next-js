@@ -7,9 +7,8 @@ import { updateProjectAvatar } from '../actions';
 import { useRouter } from 'next/navigation';
 import defaultImg from '@/public/images/project/default.jpeg';
 import { useEffect, useRef, useState } from 'react';
-import { CldImage } from 'next-cloudinary';
 
-export default function AvatarForm({projectDetail}:{projectDetail:ProjectDetail}) {
+export default function ProjectAvatarForm({projectDetail}:{projectDetail:ProjectDetail}) {
 
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);

@@ -1,8 +1,8 @@
 import { getProjectDetail } from "@/features/projects/actions";
-import AvatarForm from "@/features/projects/forms/AvatarForm";
-import DeleteForm from "@/features/projects/forms/DeleteForm";
 import { ProjectParams } from "@/features/projects/type";
-import UpdateForm from "@/features/projects/forms/UpdateForm";
+import ProjectAvatarForm from "@/features/projects/forms/AvatarForm";
+import ProjectUpdateForm from "@/features/projects/forms/UpdateForm";
+import ProjectDeleteForm from "@/features/projects/forms/DeleteForm";
 
 export default async function Page(
   { params }: { params:ProjectParams }
@@ -17,13 +17,13 @@ export default async function Page(
           ? (
             <div className="mx-auto max-w-md">
               <div className="mb-4">
-                <AvatarForm projectDetail={projectDetail} />
+                <ProjectAvatarForm projectDetail={projectDetail} />
               </div>
               <div className="mb-14">
-                <UpdateForm projectDetail={projectDetail} />
+                <ProjectUpdateForm projectDetail={projectDetail} />
               </div>
               <div>
-                <DeleteForm projectDetail={projectDetail}
+                <ProjectDeleteForm projectDetail={projectDetail}
                 />
               </div>
             </div>

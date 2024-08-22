@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-export default function UpdateForm(
+export default function ProjectUpdateForm(
   {projectDetail}:{projectDetail:ProjectDetail}
 ) {
 

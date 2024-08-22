@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 
-export default function DeleteForm(
+export default function ProjectDeleteForm(
   {projectDetail}:{projectDetail:ProjectDetail},
 ){
   const dialog = useRef<HTMLDialogElement>(null);

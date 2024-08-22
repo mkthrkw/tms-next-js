@@ -1,6 +1,6 @@
-import CreateForm from '@/features/projects/forms/CreateForm';
 import AsideLogo from './parts/AsideLogo';
 import AsideMenu from '@/features/projects/components/AsideMenu';
+import ProjectCreateForm from '@/features/projects/forms/CreateForm';
 
 export default async function Aside() {
 
@@ -10,7 +10,7 @@ export default async function Aside() {
         <AsideLogo />
         <AsideMenu />
       </div>
-      <CreateForm/>
+      <ProjectCreateForm/>
     </aside>
   );
 }

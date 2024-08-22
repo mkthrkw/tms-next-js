@@ -10,7 +10,7 @@ import { ActionState } from "../type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema, ProjectSchemaType } from "../schema";
 
-export default function CreateForm() {
+export default function ProjectCreateForm() {
 
   const {
     register,
