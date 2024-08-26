@@ -65,7 +65,7 @@ export default function ProjectCreateForm() {
             placeholder="プロジェクトの説明"
           ></textarea>
           {errors.description && <p className="text-error mt-1">{errors.description.message}</p>}
-          <button className="btn btn-primary mt-4">作成</button>
+          <button className="btn btn-primary mt-4" disabled={isSubmitting}>作成</button>
         </form>
       </CommonModal>
     </>

@@ -43,15 +43,16 @@ export default function ProjectUpdateForm(
       <label className="label">プロジェクト名</label>
       <input
         {...register('name',{value:projectDetail.name})}
-        className="input input-bordered mb-4"
-      >
-      </input>
-      <label className="label">プロジェクトの説明</label>
+        className="input input-bordered"
+      />
+      {errors.name && <p className="text-error text-xs mt-1">{errors.name.message}</p>}
+      <label className="label　mt-4">プロジェクトの説明</label>
       <textarea
         {...register('description',{value:projectDetail.description})}
         className="textarea h-24 textarea-bordered mb-4"
-      ></textarea>
-      <button className="btn btn-primary">更新</button>
+      />
+      {errors.description && <p className="text-error text-xs mt-1">{errors.description.message}</p>}
+      <button className="btn btn-primary mt-4" disabled={isSubmitting}>更新</button>
     </form>
   )
 }
