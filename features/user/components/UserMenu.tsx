@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getUser } from './actions';
+import { getUser } from '../actions';
 
 export default async function UserMenu() {
   const user = await getUser();

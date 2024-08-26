@@ -1,6 +1,6 @@
 import { getUser } from '@/features/user/actions';
 import HeaderLogo from './parts/HeaderLogo';
-import UserMenu from '@/features/user/UserMenu';
+import UserMenu from '@/features/user/components/UserMenu';
 
 export default async function Header({drawerId}:{drawerId:string}) {
 
