@@ -21,9 +21,9 @@ export type FetchProps = {
 
 
 // ===========================================
-//                   Common
+//                  Base
 // ===========================================
-async function fetchCommon(
+async function fetchBase(
   fetchUrl:string,
   fetchProps:FetchProps,
   customErrorMessage: { [key: number]: string }
@@ -59,7 +59,7 @@ export async function fetchGet({
   if (hasToken) {
     fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
   };
-  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
+  return fetchBase(fetchUrl, fetchProps, customErrorMessage);
 }
 
 
@@ -85,7 +85,7 @@ export async function fetchPost({
   if (params) {
     fetchProps.body = JSON.stringify(params);
   };
-  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
+  return fetchBase(fetchUrl, fetchProps, customErrorMessage);
 }
 
 
@@ -111,7 +111,7 @@ export async function fetchPatch({
   if (params) {
     fetchProps.body = JSON.stringify(params);
   };
-  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
+  return fetchBase(fetchUrl, fetchProps, customErrorMessage);
 }
 
 
@@ -133,5 +133,5 @@ export async function fetchDelete({
   if (hasToken) {
     fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
   };
-  return fetchCommon(fetchUrl, fetchProps, customErrorMessage);
+  return fetchBase(fetchUrl, fetchProps, customErrorMessage);
 }
