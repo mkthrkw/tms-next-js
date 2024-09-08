@@ -8,6 +8,7 @@ export function getTokenSetProps(value: string) {
     maxAge: Number(process.env.TOKEN_MAX_AGE),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite:'lax' as 'lax',
   };
 }
 
@@ -18,6 +19,7 @@ export function getTokenRemoveProps() {
     maxAge: 0,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as 'lax',
   };
 }
 
