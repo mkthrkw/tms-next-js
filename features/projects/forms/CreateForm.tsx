@@ -1,7 +1,7 @@
 'use client';
 
 import { createProject } from "../actions";
-import CommonModal from "@/components/modals/CommonModal";
+import { CommonModal } from "@/components/modals/CommonModal";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ import { ActionState } from "../type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema, ProjectSchemaType } from "../schema";
 
-export default function ProjectCreateForm() {
+export function ProjectCreateForm() {
 
   const {
     register,

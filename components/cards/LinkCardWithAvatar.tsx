@@ -9,7 +9,7 @@ type Props = {
   }
 }
 
-export default function LinkCardWithAvatar({object} : Props) {
+export function LinkCardWithAvatar({object} : Props) {
   
   return (
     <Link

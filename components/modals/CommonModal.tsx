@@ -1,4 +1,4 @@
-export default function CommonModal({
+export function CommonModal({
   children,
   dialog,
   title,

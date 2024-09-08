@@ -9,7 +9,7 @@ type Props = {
   }
 }
 
-export default function AsideLinkCardWithAvatar({pathname, object} : Props) {
+export function AsideLinkCardWithAvatar({pathname, object} : Props) {
   
   const isCurrent = pathname && pathname.includes(object.href);
   const addWrapClass = isCurrent ? " bg-base-content/70" : "";

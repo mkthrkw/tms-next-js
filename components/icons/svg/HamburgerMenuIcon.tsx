@@ -1,4 +1,4 @@
-export default function HamburgerMenuIcon({
+export function HamburgerMenuIcon({
   width,
   height,
   addClass='fill-base-content stroke-base-content'

@@ -1,8 +1,7 @@
-
-import HamburgerMenuIcon from '@/components/icons/svg/HamburgerMenuIcon'
+import { HamburgerMenuIcon } from '@/components/icons/svg/HamburgerMenuIcon'
 import { ProjectDetail } from '../type'
 
-export default function ProjectMenu({projectDetail}:{projectDetail:ProjectDetail}) {
+export function ProjectMenu({projectDetail}:{projectDetail:ProjectDetail}) {
   return (
     <div className='dropdown dropdown-top dropdown-end'>
       <div tabIndex={0} role="button" className="btn w-12 h-12 rounded-full bg-slate-700/90 hover:bg-slate-500/90">

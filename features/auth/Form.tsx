@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthSchemaType, authSchema } from "./schema";
 
-export default function LoginForm() {
+export function LoginForm() {
 
   const {
     register,

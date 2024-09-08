@@ -1,4 +1,4 @@
-import LinkCardWithAvatar from "@/components/cards/LinkCardWithAvatar";
+import { LinkCardWithAvatar } from "@/components/cards/LinkCardWithAvatar";
 import { getProjects } from "@/features/projects/actions";
 import { ProjectCard } from "@/features/projects/type";
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { uploadImage } from "@/util/cloudinary/actions";
+import { uploadImage } from "@/lib/cloudinary/actions";
 import {fetchGet, fetchPatch} from "@/util/fetch/methods";
 import { ActionState } from "./type";
 import { UserSchemaType } from "./schema";

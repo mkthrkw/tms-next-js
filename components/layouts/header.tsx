@@ -1,8 +1,7 @@
-import { getUser } from '@/features/user/actions';
-import HeaderLogo from './parts/HeaderLogo';
-import UserMenu from '@/features/user/components/UserMenu';
+import { HeaderLogo } from './parts/HeaderLogo';
+import { UserMenu } from '@/features/user/components/UserMenu';
 
-export default async function Header({drawerId}:{drawerId:string}) {
+export async function Header({drawerId}:{drawerId:string}) {
 
   return (
     <header className="w-full navbar bg-base-300 min-h-12 px-2 py-0 lg:py-1 sticky top-0 my-0">

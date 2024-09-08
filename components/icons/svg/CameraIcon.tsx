@@ -1,4 +1,4 @@
-export default function CameraIcon({
+export function CameraIcon({
   width,
   height,
   addClass='fill-base-content stroke-base-content'

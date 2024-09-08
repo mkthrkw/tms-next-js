@@ -1,9 +1,9 @@
 "use client";
 import { usePathname } from 'next/navigation';
-import AsideLinkCardWithAvatar from '@/components/cards/AsideLinkCardWithAvatar';
+import { AsideLinkCardWithAvatar } from '@/components/cards/AsideLinkCardWithAvatar';
 import { ProjectCard } from '../type';
 
-export default function LinkCard({projectCard}:{projectCard:ProjectCard}) {
+export function LinkCard({projectCard}:{projectCard:ProjectCard}) {
   const pathName = usePathname();
 
   return (

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { userSchema, UserSchemaType } from "../schema";
 
-export default function UserUpdateForm({user}:{user:User}) {
+export function UserUpdateForm({user}:{user:User}) {
 
   const {
     register,

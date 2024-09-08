@@ -1,14 +1,14 @@
 "use client";
 
 import { ActionState, ProjectDetail } from '../type'
-import CameraIcon from '@/components/icons/svg/CameraIcon';
+import { CameraIcon } from '@/components/icons/svg/CameraIcon';
 import { toast } from 'react-toastify';
 import { updateProjectAvatar } from '../actions';
 import { useRouter } from 'next/navigation';
 import defaultImg from '@/public/images/project/default.jpeg';
 import { useEffect, useRef, useState } from 'react';
 
-export default function ProjectAvatarForm({projectDetail}:{projectDetail:ProjectDetail}) {
+export function ProjectAvatarForm({projectDetail}:{projectDetail:ProjectDetail}) {
 
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);

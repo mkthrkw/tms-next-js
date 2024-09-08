@@ -3,7 +3,7 @@
 import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
 import { ActionState } from "./type";
 import { ProjectSchemaType } from "./schema";
-import { uploadImage } from "@/util/cloudinary/actions";
+import { uploadImage } from "@/lib/cloudinary/actions";
 
 
 export async function createProject(prevState: ActionState, inputValues: ProjectSchemaType) {

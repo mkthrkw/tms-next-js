@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getUser } from '../actions';
 
-export default async function UserMenu() {
+export async function UserMenu() {
   const user = await getUser();
 
   return (

@@ -1,9 +1,9 @@
 import { getProjects } from "../actions";
 import { ProjectCard } from "../type";
-import LinkCard from "./LinkCard";
+import { LinkCard } from "./LinkCard";
 
 
-export default async function AsideMenu() {
+export async function AsideMenu() {
   const projectCards:ProjectCard[] = await getProjects();
 
   return (

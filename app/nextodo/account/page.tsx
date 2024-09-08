@@ -1,6 +1,6 @@
 import { getUser } from "@/features/user/actions";
-import UserAvatarForm from "@/features/user/forms/AvatarForm";
-import UserUpdateForm from "@/features/user/forms/UpdateForm";
+import { UserAvatarForm } from "@/features/user/forms/AvatarForm";
+import { UserUpdateForm } from "@/features/user/forms/UpdateForm";
 
 export default async function Page() {
 

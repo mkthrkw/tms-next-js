@@ -1,8 +1,8 @@
 import { getProjectDetail } from "@/features/projects/actions";
 import { ProjectParams } from "@/features/projects/type";
-import ProjectAvatarForm from "@/features/projects/forms/AvatarForm";
-import ProjectUpdateForm from "@/features/projects/forms/UpdateForm";
-import ProjectDeleteForm from "@/features/projects/forms/DeleteForm";
+import { ProjectAvatarForm } from "@/features/projects/forms/AvatarForm";
+import { ProjectUpdateForm } from "@/features/projects/forms/UpdateForm";
+import { ProjectDeleteForm } from "@/features/projects/forms/DeleteForm";
 
 export default async function Page(
   { params }: { params:ProjectParams }

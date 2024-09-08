@@ -3,11 +3,11 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { redirectToNextPath, refreshLogin, ActionState } from "./actions";
-import CommonModal from "@/components/modals/CommonModal";
+import { CommonModal } from "@/components/modals/CommonModal";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
-export default function RefreshLoginModal() {
+export function RefreshLoginModal() {
   
   const dialog = useRef<HTMLDialogElement>(null);
   const searchParams = useSearchParams();

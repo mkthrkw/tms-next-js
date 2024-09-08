@@ -2,14 +2,14 @@
 
 import React, { useRef } from 'react'
 import { ActionState, ProjectDetail } from '../type'
-import CommonModal from '@/components/modals/CommonModal'
+import { CommonModal } from '@/components/modals/CommonModal'
 import { deleteProject } from '../actions';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 
-export default function ProjectDeleteForm(
+export function ProjectDeleteForm(
   {projectDetail}:{projectDetail:ProjectDetail},
 ){
   const dialog = useRef<HTMLDialogElement>(null);

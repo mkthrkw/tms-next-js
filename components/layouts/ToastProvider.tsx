@@ -3,7 +3,7 @@
 import "react-toastify/dist/ReactToastify.css";
 import { Flip, ToastContainer } from "react-toastify";
 
-export default function ToastProvider(
+export function ToastProvider(
   { children }: {children: React.ReactNode;}) {
 
   return (

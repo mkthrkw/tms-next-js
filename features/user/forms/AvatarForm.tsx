@@ -1,14 +1,14 @@
 "use client";
 
 import { ActionState, User } from '../type';
-import CameraIcon from '@/components/icons/svg/CameraIcon';
+import { CameraIcon } from '@/components/icons/svg/CameraIcon';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import defaultImg from '@/public/images/project/default.jpeg';
 import { useEffect, useRef, useState } from 'react';
 import { updateUserAvatar } from '../actions';
 
-export default function UserAvatarForm({user}:{user:User}) {
+export function UserAvatarForm({user}:{user:User}) {
 
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
