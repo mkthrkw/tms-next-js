@@ -4,17 +4,15 @@ import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/metho
 import { ActionState } from "./type";
 import { ProjectSchemaType } from "./schema";
 import { uploadImage } from "@/lib/cloudinary/actions";
+import { List } from "../lists/type";
 
 
-export async function createProject(prevState: ActionState, inputValues: ProjectSchemaType) {
+function baseProjectAction(func: Function, prevState: ActionState, url: string, params: any) {
   try {
-    await fetchPost({
-      url: '/tms/projects/',
+    func({
+      url: url,
       hasToken: true,
-      params: {
-        name: inputValues.name,
-        description: inputValues.description,
-      },
+      params: params,
     });
     prevState.state = 'resolved';
     return prevState;
@@ -23,62 +21,61 @@ export async function createProject(prevState: ActionState, inputValues: Project
     prevState.state = 'rejected';
     return prevState;
   }
+}
+
+
+export async function createProject(prevState: ActionState, inputValues: ProjectSchemaType) {
+  const url = '/tms/projects/';
+  const params = {
+    name: inputValues.name,
+    description: inputValues.description,
+  }
+  return baseProjectAction(fetchPost, prevState, url, params);
 }
 
 
 export async function updateProject(prevState: ActionState, projectId:string, inputValues: ProjectSchemaType) {
-  try {
-    await fetchPatch({
-      url: `/tms/projects/${projectId}/`,
-      hasToken: true,
-      params: {
-        name: inputValues.name,
-        description: inputValues.description,
-      },
-    });
-    prevState.state = 'resolved';
-    return prevState;
-  } catch (error: any) {
-    prevState.message = error.message ?? 'エラーが発生しました。';
-    prevState.state = 'rejected';
-    return prevState;
+  const url = `/tms/projects/${projectId}/`;
+  const params = {
+    name: inputValues.name,
+    description: inputValues.description,
   }
+  return baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
 export async function updateProjectAvatar(prevState: ActionState, projectId: string, fileData: string) {
-  try {
-    const results = await uploadImage(fileData, projectId);
-    await fetchPatch({
-      url: `/tms/projects/${projectId}/`,
-      hasToken: true,
-      params: {
-        image_url: results.secure_url,
-      },
-    });
-    prevState.state = 'resolved';
-    return prevState;
-  } catch (error: any) {
-    prevState.message = error.message ?? 'エラーが発生しました。';
-    prevState.state = 'rejected';
-    return prevState;
+  const results = await uploadImage(fileData, projectId);
+  const url = `/tms/projects/${projectId}/`;
+  const params = {
+    image_url: results.secure_url,
   }
+  return baseProjectAction(fetchPatch, prevState, url, params);
+}
+
+
+export async function updateProjectTicketOrder(prevState: ActionState, projectId: string, lists: List[]) {
+  const url = `/tms/patch-ticket-order/${projectId}/`;
+  const params = {
+    lists: lists,
+  }
+  return baseProjectAction(fetchPatch, prevState, url, params);
+}
+
+
+export async function updateProjectListOrder(prevState: ActionState, projectId: string, lists: List[]) {
+  const url = `/tms/patch-list-order/${projectId}/`;
+  const params = {
+    lists: lists,
+  }
+  return baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
 export async function deleteProject(prevState: ActionState, projectId: string) {
-  try {
-    await fetchDelete({
-      url: `/tms/projects/${projectId}`,
-      hasToken: true,
-    });
-    prevState.state = 'resolved';
-    return prevState;
-  } catch (error: any) {
-    prevState.message = error.message ?? 'エラーが発生しました。';
-    prevState.state = 'rejected';
-    return prevState;
-  }
+  const url = `/tms/projects/${projectId}`;
+  const params = undefined;
+  return baseProjectAction(fetchDelete, prevState, url, params);
 }
 
 
@@ -97,6 +94,17 @@ export async function getProjectDetail(projectId: string) {
   try{
     return await fetchGet({
       url: `/tms/projects/${projectId}/`,
+      hasToken: true,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getProjectNestedData(projectId: string) {
+  try{
+    return await fetchGet({
+      url: `/tms/get-nested-project/${projectId}/`,
       hasToken: true,
     });
   } catch (error) {
