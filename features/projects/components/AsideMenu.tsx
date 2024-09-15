@@ -1,14 +1,14 @@
 import { getProjects } from "../actions";
-import { ProjectCard } from "../type";
+import { ProjectDetail } from "../type";
 import { LinkCard } from "./LinkCard";
 
 
 export async function AsideMenu() {
-  const projectCards:ProjectCard[] = await getProjects();
+  const projects:ProjectDetail[] = await getProjects();
 
   return (
-    projectCards.map((projectCard:ProjectCard) => (
-      <LinkCard projectCard={projectCard} />
+    projects.map((projectDetail:ProjectDetail) => (
+      <LinkCard projectDetail={projectDetail} />
     ))
   );
 }

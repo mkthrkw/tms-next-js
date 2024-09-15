@@ -8,7 +8,9 @@ import { useRouter } from 'next/navigation';
 import defaultImg from '@/public/images/project/default.jpeg';
 import { useEffect, useRef, useState } from 'react';
 
-export function ProjectAvatarForm({projectDetail}:{projectDetail:ProjectDetail}) {
+export function ProjectAvatarForm(
+  {projectDetail}:{projectDetail:ProjectDetail}
+) {
 
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);

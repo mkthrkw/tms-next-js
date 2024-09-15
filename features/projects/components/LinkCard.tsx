@@ -1,19 +1,19 @@
 "use client";
 import { usePathname } from 'next/navigation';
 import { AsideLinkCardWithAvatar } from '@/components/cards/AsideLinkCardWithAvatar';
-import { ProjectCard } from '../type';
+import { ProjectDetail } from '../type';
 
-export function LinkCard({projectCard}:{projectCard:ProjectCard}) {
+export function LinkCard({projectDetail}:{projectDetail:ProjectDetail}) {
   const pathName = usePathname();
 
   return (
     <AsideLinkCardWithAvatar
-      key={projectCard.id}
+      key={projectDetail.id}
       pathname={pathName}
       object={{
-        href: `/nextodo/${projectCard.id}`,
-        title: projectCard.name,
-        url: projectCard.image_url
+        href: `/nextodo/${projectDetail.id}`,
+        title: projectDetail.name,
+        url: projectDetail.image_url
       }}
     />
   );

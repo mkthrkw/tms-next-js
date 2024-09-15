@@ -5,11 +5,12 @@ export type ActionState = {
   message: string,
 };
 
-export type ProjectDetail = {
+export type ProjectNestedData = {
   id: string,
   name: string,
   description: string,
   image_url: string,
+  order: number,
   lists: List[]
 };
 
@@ -17,9 +18,10 @@ export type ProjectParams = {
   projectId: string
 };
 
-export type ProjectCard = {
+export type ProjectDetail = {
   id: string,
   name: string,
   description: string,
-  image_url: string
+  image_url: string,
+  order: number,
 }
