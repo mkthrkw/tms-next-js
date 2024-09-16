@@ -15,11 +15,11 @@ export default function NextodoLayout({
   }) {
     const drawerId = "layout-drawer";
     return (
-      <div>
+      <div className="text-base-content">
         <div className="drawer lg:drawer-open">
           <input id={drawerId} type="checkbox" className="drawer-toggle" />
           {/* ===== Drawer content ===== */}
-          <div className="drawer-content flex flex-col min-h-screen">
+          <div className="drawer-content flex flex-col min-h-screen bg-base-100">
             <Header drawerId={drawerId} />
             <main className="flex-grow">
               {children}
