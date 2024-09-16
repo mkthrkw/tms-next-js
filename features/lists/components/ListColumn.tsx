@@ -74,7 +74,6 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
       if(!movedLists) return;
       setLists(movedLists);
       updateMovedLists(movedLists, projectNestedData.id);
-      console.log(movedLists);
     }else{
       const listsWithMovedTickets = getMovedTicketsSameContainer(event, projectNestedData);
       if(!listsWithMovedTickets) return;

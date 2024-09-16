@@ -38,7 +38,6 @@ export async function refreshLogin(prevState: ActionState) {
 
   const refreshToken = getRefreshToken();
   const refreshLoginCustomErrorMessage = getRefreshLoginCustomErrorMessage();
-  console.log(refreshToken);
   if (!refreshToken) {
     prevState.state = 'rejected';
     prevState.message = refreshLoginCustomErrorMessage[401] ?? 'エラーが発生しました。';
