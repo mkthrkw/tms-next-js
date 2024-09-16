@@ -15,7 +15,7 @@ export function CommonModal({
 
   return (
     <dialog className="modal" ref={dialog}>
-      <div className="modal-box text-center">
+      <div className="modal-box text-center text-base-content bg-base-100 border-base-content border">
         <h3 className="font-bold text-lg mb-4">{ title }</h3>
         { text && (
           <p className="mb-4">
