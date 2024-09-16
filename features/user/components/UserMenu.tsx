@@ -8,7 +8,7 @@ export async function UserMenu() {
     <div className="flex-none">
       <Link href="/nextodo/account" className='btn btn-sm btn-ghost h-10'>
         <div className="avatar">
-          <div className="rounded-full w-8">
+          <div className="w-10 mask mask-squircle bg-base-100">
             <img src={ user.image_url }/>
           </div>
         </div>

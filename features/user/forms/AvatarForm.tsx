@@ -53,7 +53,7 @@ export function UserAvatarForm({user}:{user:User}) {
   return (
     <div className='text-center'>
       <div className="avatar">
-        <div className="w-32 rounded-full">
+        <div className="w-40 mask mask-squircle bg-base-200">
           <img
             src={imageSrc}
             width="150"
@@ -62,7 +62,7 @@ export function UserAvatarForm({user}:{user:User}) {
           />
         </div>
       </div>
-      <div className='relative left-10 bottom-8'>
+      <div className='relative left-16 bottom-8'>
         <div
           onClick={() => inputRef.current?.click()}
           className="btn w-11 h-11 rounded-full bg-slate-700/70 hover:bg-slate-500/70"
