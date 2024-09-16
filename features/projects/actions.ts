@@ -1,7 +1,7 @@
 'use server';
 
 import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
-import { ActionState } from "./type";
+import { ActionState, ProjectDetail } from "./type";
 import { ProjectSchemaType } from "./schema";
 import { uploadImage } from "@/lib/cloudinary/actions";
 import { List } from "../lists/type";
@@ -67,6 +67,15 @@ export async function updateProjectListOrder(prevState: ActionState, projectId: 
   const url = `/tms/patch-list-order/${projectId}/`;
   const params = {
     lists: lists,
+  }
+  return baseProjectAction(fetchPatch, prevState, url, params);
+}
+
+
+export async function updateProjectsOrder(prevState: ActionState, projects: ProjectDetail[]) {
+  const url = `/tms/patch-project-order/`;
+  const params = {
+    projects: projects,
   }
   return baseProjectAction(fetchPatch, prevState, url, params);
 }

@@ -1,5 +1,5 @@
-import { LinkCardWithAvatar } from "@/components/cards/LinkCardWithAvatar";
 import { getProjects } from "@/features/projects/actions";
+import { ProjectColumn } from "@/features/projects/components/ProjectColumn";
 import { ProjectDetail } from "@/features/projects/type";
 
 export default async function Page() {
@@ -10,19 +10,9 @@ export default async function Page() {
     <>
       <div className="p-8 w-full h-full">
         <h1 className="text-4xl text-center mb-10">This is ProjectList</h1>
-          <div className="md:flex md:flex-wrap md:flex-row flex-col gap-4 mx-auto justify-between max-w-3xl">
-            {projects.map((projectDetail:ProjectDetail) => (
-              <LinkCardWithAvatar
-                key={projectDetail.id}
-                object={{
-                  href: `/nextodo/${projectDetail.id}`,
-                  title: projectDetail.name,
-                  text: projectDetail.description,
-                  url: projectDetail.image_url
-                }}
-              />
-            ))}
-          </div>
+        <div className="flex flex-col gap-3 mx-auto justify-between max-w-2xl">
+          <ProjectColumn projects={projects}/>
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,10 @@
 import { List } from "@/features/lists/type";
-import { updateProjectListOrder, updateProjectTicketOrder } from "@/features/projects/actions";
-import { ActionState, ProjectNestedData } from "@/features/projects/type";
+import {
+  updateProjectListOrder,
+  updateProjectsOrder,
+  updateProjectTicketOrder
+} from "@/features/projects/actions";
+import { ActionState, ProjectDetail, ProjectNestedData } from "@/features/projects/type";
 import { Active, Over } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { toast } from "react-toastify";
@@ -78,6 +82,27 @@ export function getMovedLists(
   });
 }
 
+export function getMovedProjects(
+  event: { active: Active; over: Over | null },
+  projects: ProjectDetail[],
+) {
+  const moveData = getMoveData(event);
+  if(!moveData) return;
+  const {from, to} = moveData;
+  if (!from || !to) return;
+  const movedProjects = arrayMove(projects, from.index, to.index);
+  return movedProjects.map((project, index) => {
+    project.order = index;
+    return project;
+  });
+}
+
+
+// ================================================================
+//
+//                          Common Actions
+//
+// ================================================================
 
 export function getMoveData(event: { active: Active; over: Over | null }) {
   const {active, over} = event;
@@ -105,11 +130,18 @@ export function arrayInsert<T>(array: T[], index: number, value: T): T[] {
 }
 
 
+// ================================================================
+//
+//                          Update Actions
+//
+// ================================================================
+
+const initialState:ActionState = {
+  state: 'pending',
+  message: '',
+}
+
 export async function updateMovedTickets(movedLists:List[], project_id:string) {
-  const initialState:ActionState = {
-    state: 'pending',
-    message: '',
-  }
   const result = await updateProjectTicketOrder(initialState, project_id, movedLists);
   if (result.state === 'rejected') {
     toast.error(result.message);
@@ -117,11 +149,14 @@ export async function updateMovedTickets(movedLists:List[], project_id:string) {
 }
 
 export async function updateMovedLists(movedLists:List[], project_id:string) {
-  const initialState:ActionState = {
-    state: 'pending',
-    message: '',
-  }
   const result = await updateProjectListOrder(initialState, project_id, movedLists);
+  if (result.state === 'rejected') {
+    toast.error(result.message);
+  }
+}
+
+export async function updateMovedProjects(movedProjects:ProjectDetail[]) {
+  const result = await updateProjectsOrder(initialState, movedProjects);
   if (result.state === 'rejected') {
     toast.error(result.message);
   }
