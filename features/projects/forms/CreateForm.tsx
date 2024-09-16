@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { ActionState } from "../type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema, ProjectSchemaType } from "../schema";
+import { AsideButton } from "@/components/buttons/AsideButton";
 
 export function ProjectCreateForm() {
 
@@ -43,9 +44,9 @@ export function ProjectCreateForm() {
   
   return (
     <>
-      <button className="btn btn-outline" onClick={ () => dialog.current?.showModal() }>
+      <AsideButton onClick={ () => dialog.current?.showModal() }>
         +プロジェクト作成
-      </button>
+      </AsideButton>
       <CommonModal
         dialog={dialog}
         title="プロジェクト作成"
