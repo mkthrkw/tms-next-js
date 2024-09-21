@@ -30,7 +30,7 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
       id={projectNestedData.id}
     >
       <SortableContext
-        items={lists.map((list) => list.id)}
+        items={lists}
         id={projectNestedData.id}
         key={projectNestedData.id}
       >
