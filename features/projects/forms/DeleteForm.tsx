@@ -27,7 +27,7 @@ export function ProjectDeleteForm(
     }
     const result = await deleteProject(initialState, projectDetail.id);
     if(result.state === 'resolved') {
-      toast.success('Create project success');
+      toast.success('Delete project success');
       dialog.current?.close();
       router.push('/nextodo');
       router.refresh();

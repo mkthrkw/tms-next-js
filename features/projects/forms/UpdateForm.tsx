@@ -46,7 +46,7 @@ export function ProjectUpdateForm(
         className="input input-bordered"
       />
       {errors.name && <p className="text-error text-xs mt-1">{errors.name.message}</p>}
-      <label className="label　mt-4">プロジェクトの説明</label>
+      <label className="label mt-4">プロジェクトの説明</label>
       <textarea
         {...register('description',{value:projectDetail.description})}
         className="textarea h-24 textarea-bordered mb-4"

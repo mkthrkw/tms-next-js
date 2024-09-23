@@ -4,7 +4,7 @@ import { UserMenu } from '@/features/user/components/UserMenu';
 export async function Header({drawerId}:{drawerId:string}) {
 
   return (
-    <header className="w-full navbar bg-primary md:bg-base-300 min-h-12 px-2 py-0 lg:py-1 sticky top-0 my-0">
+    <header className="w-full navbar bg-primary lg:bg-base-300 min-h-12 px-2 py-0 lg:py-1 sticky top-0 my-0">
       {/* Left hamburger / mobile only */}
       <div className="flex-none lg:hidden">
         <label htmlFor={drawerId} aria-label="open sidebar" className="btn btn-square btn-ghost">
