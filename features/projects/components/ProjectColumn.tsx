@@ -4,7 +4,7 @@ import { ProjectDetail } from "../type";
 import { closestCorners, DndContext, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { ProjectCard } from "./ProjectCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getMovedProjects, updateMovedProjects } from "@/lib/dnd_kit/actions";
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +12,11 @@ export function ProjectColumn({projects}:{projects:ProjectDetail[]}) {
 
   const [projectsState, setProjectsState] = useState<ProjectDetail[]>(projects);
   const router = useRouter();
+
+  useEffect(() => {
+    if(projectsState === projects) return;
+    setProjectsState(projects);
+  }, [projects]);
 
   return (
     <DndContext

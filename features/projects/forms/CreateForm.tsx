@@ -16,13 +16,14 @@ export function ProjectCreateForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState:{ isSubmitting, errors },
   } = useForm<ProjectSchemaType>({
       mode: 'onBlur',
       resolver: zodResolver(projectSchema),
   });
-  const router = useRouter();
   const dialog = useRef<HTMLDialogElement>(null);
+  const router = useRouter();
 
   const onSubmit = async (inputValues: ProjectSchemaType) => {
     const initialState:ActionState = {
@@ -32,8 +33,9 @@ export function ProjectCreateForm() {
     const result =  await createProject(initialState, inputValues);
     if(result.state === 'resolved') {
       toast.success('Create project success');
-      router.refresh();
       dialog.current?.close();
+      reset();
+      router.refresh();
     }
     if (result.state === 'rejected') {
       toast.error(result.message);
