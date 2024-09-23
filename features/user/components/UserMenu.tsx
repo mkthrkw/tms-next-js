@@ -5,10 +5,10 @@ export async function UserMenu() {
   const user = await getUser();
 
   return (
-    <div className="flex-none">
+    <div className="tooltip tooltip-left" data-tip="ユーザーの編集">
       <Link href="/nextodo/account" className='btn btn-sm btn-ghost h-10'>
         <div className="avatar">
-          <div className="w-10 mask mask-squircle bg-base-100">
+          <div className="w-9 mask mask-squircle bg-base-100">
             <img src={ user.image_url }/>
           </div>
         </div>
