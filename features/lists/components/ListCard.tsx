@@ -6,10 +6,15 @@ import { Sortable } from "@/lib/dnd_kit/Sortable";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { Droppable } from "@/lib/dnd_kit/Droppable";
 import { CSS } from '@dnd-kit/utilities';
-import { ListMenu } from "./ListMenu";
-import { useState } from "react";
+import { HamburgerMenuIcon } from "@/components/icons/svg/HamburgerMenuIcon";
 
-export function ListCard({ list }: { list: List }) {
+export function ListCard({
+  list,
+  handleListModalOpen,
+}: {
+  list: List,
+  handleListModalOpen: (list:List) => void,
+}) {
 
   const {
     attributes,
@@ -29,9 +34,6 @@ export function ListCard({ list }: { list: List }) {
     opacity: isDragging ? 0.3 : 1,
   };
 
-  const [title, setTitle] = useState(list.title);
-  const [color, setColor] = useState(list.color);
-
   return (
     <div className="flex-none w-screen lg:w-72 px-2 lg:px-0">
       <div
@@ -39,20 +41,27 @@ export function ListCard({ list }: { list: List }) {
         style={style}
         className="bg-base-300 shadow-sm rounded-xl"
       >
+        {/* Drag handle */}
         <div
           ref={setActivatorNodeRef}
           {...attributes}
           {...listeners}
           className={"w-full h-5 rounded-t-xl text-xs text-center content-center text-white"}
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: list.color }}
         >:::</div>
+        {/* Top menu */}
         <div className="flex justify-between mb-2 border-b-2 mt-2 mx-2 px-2 border-base-content/50">
-          <h2 className="text-xl">{title}</h2>
-          <ListMenu list={list} title={title} setTitle={setTitle} color={color} setColor={setColor}/>
+          <h2 className="text-xl">{ list.title }</h2>
+          <div className='tooltip tooltip-right' data-tip="リストの編集">
+            <div onClick={ () => handleListModalOpen(list) } className="hover:bg-base-content/20 hover:cursor-pointer p-1 rounded-md">
+              <HamburgerMenuIcon width={24} height={24} addClass={'stroke-base-content'}/>
+            </div>
+          </div>
         </div>
+        {/* Ticket column */}
         <SortableContext items={list.tickets} key={list.id} id={list.id}>
           <Droppable key={list.id} id={list.id}>
-            <div className="min-h-[80vh] flex flex-col gap-2 p-2">
+            <div className="min-h-[73vh] flex flex-col gap-2 p-2">
               {list.tickets.map((ticket:Ticket) => (
                 <Sortable key={ticket.id} id={ticket.id}>
                   <TicketCard ticket={ticket} />
