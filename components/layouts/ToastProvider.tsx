@@ -12,7 +12,7 @@ export function ToastProvider(
       <ToastContainer
         toastClassName={"rounded-lg min-w-96 text-center"}
         position="bottom-center"
-        autoClose={3000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

@@ -50,7 +50,7 @@ export function ListUpdateForm({
       toast.success('Update List success');
     }
     if (result.state === 'rejected') {
-      toast.error(result.message);
+      toast.error(result.message,{autoClose: 3000});
     }
   }
 

@@ -38,7 +38,7 @@ export function ProjectCreateForm() {
       router.refresh();
     }
     if (result.state === 'rejected') {
-      toast.error(result.message);
+      toast.error(result.message,{autoClose: 3000});
     }
   }
 
