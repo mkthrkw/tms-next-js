@@ -1,13 +1,13 @@
 "use client";
 import { ListCard } from './ListCard';
 import { ProjectNestedData } from '@/features/projects/type';
-import { List, ListModalProps } from '../type';
-import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
+import { List } from '../type';
+import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { customClosestCorners } from '@/lib/dnd_kit/customClosestCorners';
-import { TicketCard } from '@/features/tickets/TicketCard';
-import { Ticket, TicketModalProps } from '@/features/tickets/type';
+import { TicketCard } from '@/features/tickets/components/TicketCard';
+import { Ticket } from '@/features/tickets/type';
 import {
   getMovedLists,
   getMovedTicketsOtherContainer,
@@ -17,32 +17,41 @@ import {
 } from '@/lib/dnd_kit/actions';
 import { ListCreateForm } from '../forms/CreateForm';
 import { ListUpdateForm } from '../forms/UpdateForm';
+import { TicketUpdateForm } from '@/features/tickets/forms/UpdateForm';
 
+
+export const TicketModalContext = createContext((ticket:Ticket) => {});
 
 export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedData}) {
   const [lists, setLists] = useState<List[]>(projectNestedData.lists);
   const [activeTicket, setActiveTicket] = useState<Ticket | undefined>();
-  const listDialog = useRef<HTMLDialogElement>(null);
-  
-  const [listModalProps, setListModalProps] = useState<ListModalProps>({
-    listId: '',
-    title: '',
-    color: '',
-  });
 
+  const listDialog = useRef<HTMLDialogElement>(null);
+  const [listModalProps, setListModalProps] = useState<List | null>(null);
   const handleListModalOpen = (list:List) => {
-    setListModalProps({
-      listId: list.id,
-      title: list.title,
-      color: list.color,
-    });
+    setListModalProps(list);
     listDialog.current?.showModal();
+  }
+
+  const ticketDialog = useRef<HTMLDialogElement>(null);
+  const [ticketModalProps, setTicketModalProps] = useState<Ticket | null>(null);
+  const handleTicketModalOpen = (ticket:Ticket) => {
+    setTicketModalProps(ticket);
+    ticketDialog.current?.showModal();
   }
 
   useEffect(() => {
     if(lists === projectNestedData.lists) return;
     setLists(projectNestedData.lists);
   }, [projectNestedData.lists]);
+
+  const customSensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
 
   return (
     <>
@@ -51,6 +60,7 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}
         collisionDetection={(args) => customClosestCorners(args, projectNestedData)}
+        sensors={customSensors}
         id={projectNestedData.id}
       >
         <SortableContext
@@ -58,9 +68,11 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
           id={projectNestedData.id}
           key={projectNestedData.id}
         >
+          <TicketModalContext.Provider value={handleTicketModalOpen}>
           {lists.map((list:List) => (
             <ListCard list={list} key={list.id} handleListModalOpen={handleListModalOpen} />
           ))}
+          </TicketModalContext.Provider>
         </SortableContext>
         {activeTicket && (
           <DragOverlay>
@@ -72,6 +84,7 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
         <ListCreateForm projectId={projectNestedData.id} />
       </div>
       <ListUpdateForm modalProps={listModalProps} dialog={listDialog} />
+      <TicketUpdateForm modalProps={ticketModalProps} dialog={ticketDialog} />
     </>
   )
 
