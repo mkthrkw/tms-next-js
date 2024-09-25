@@ -43,28 +43,26 @@ export function ListDeleteForm({
 
   return (
     <>
-      <div className='flex flex-col'>
-        <button
-          className='btn btn-outline text-red-500/50 hover:border-red-300 hover:bg-red-300 w-56 self-center'
-          onClick={() => dialog.current?.showModal()}
-        >
-          削除
-        </button>
-        <CommonModal
-          dialog={dialog}
-          title='リストの削除'
-          text='取り消しは出来ませんが、本当に削除しますか？'
-        >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <button
-              className='btn btn-outline btn-error btn-wide'
-              disabled={isSubmitting}
-            >
-              削除実行
-            </button>
-          </form>
-        </CommonModal>
-      </div>
+      <button
+        className='btn btn-outline text-red-500/50 hover:border-red-300 hover:bg-red-300 w-56 self-center'
+        onClick={() => dialog.current?.showModal()}
+      >
+        リストの削除
+      </button>
+      <CommonModal
+        dialog={dialog}
+        title='リストの削除'
+        text='取り消しは出来ませんが、本当に削除しますか？'
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <button
+            className='btn btn-outline btn-error btn-wide'
+            disabled={isSubmitting}
+          >
+            削除実行
+          </button>
+        </form>
+      </CommonModal>
     </>
   )
 }

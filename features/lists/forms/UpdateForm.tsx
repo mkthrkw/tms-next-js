@@ -1,7 +1,7 @@
 "use client";
 import { CommonModal } from '@/components/modals/CommonModal';
 import React, { useEffect } from 'react'
-import { ActionState, ListModalProps } from '../type';
+import { ActionState, List } from '../type';
 import { useForm } from 'react-hook-form';
 import { listSchema, ListSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,12 +13,13 @@ import {
   grayScale,
 } from '@/util/colors/colorPalette';
 import { ListDeleteForm } from './DeleteForm';
+import { useRouter } from 'next/navigation';
 
 export function ListUpdateForm({
   modalProps,
   dialog,
 }:{
-  modalProps:ListModalProps,
+  modalProps:List | null,
   dialog:React.RefObject<HTMLDialogElement>
 }) {
 
@@ -39,15 +40,18 @@ export function ListUpdateForm({
   ];
   const [colorState, setColorState] = React.useState<string>('');
 
+  const router = useRouter();
+
   const onSubmit = async (inputValues: ListSchemaType) => {
     const initialState:ActionState = {
       state: 'pending',
       message: '',
     }
-    const result = await updateList(initialState, modalProps.listId, inputValues);
+    const result = await updateList(initialState, modalProps?.id ?? '', inputValues);
     if(result.state === 'resolved') {
-      dialog.current?.close();
       toast.success('Update List success');
+      dialog.current?.close();
+      router.refresh();
     }
     if (result.state === 'rejected') {
       toast.error(result.message,{autoClose: 3000});
@@ -55,11 +59,10 @@ export function ListUpdateForm({
   }
 
   useEffect(() => {
-    if(dialog.current?.open){
+    if(dialog.current?.open && modalProps) {
       setValue('title', modalProps.title);
       setValue('color', modalProps.color);
       setColorState(modalProps.color);
-      console.log('modal opened');
     }
   }, [modalProps]);
 
@@ -72,7 +75,7 @@ export function ListUpdateForm({
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <label className="label">リスト名</label>
           <input
-            {...register('title',{value:modalProps.title})}
+            {...register('title',{value:modalProps?.title})}
             className="input input-bordered"
           />
           {errors.title && <p className="text-error text-xs mt-1">{errors.title.message}</p>}
@@ -113,7 +116,7 @@ export function ListUpdateForm({
           </button>
         </form>
         <div className="divider my-6"></div>
-        <ListDeleteForm listId={modalProps.listId} underDialog={dialog} />
+        <ListDeleteForm listId={modalProps?.id ?? ''} underDialog={dialog} />
       </CommonModal>
     </>
   )
