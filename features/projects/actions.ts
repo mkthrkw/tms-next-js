@@ -55,6 +55,11 @@ export async function updateProjectAvatar(prevState: ActionState, projectId: str
 
 
 export async function updateProjectTicketOrder(prevState: ActionState, projectId: string, lists: List[]) {
+  lists.reverse().map((list) => {
+    list.tickets.reverse().map((ticket, index) => {
+      ticket.order = index;
+    });
+  });
   const url = `/tms/patch-ticket-order/${projectId}/`;
   const params = {
     lists: lists,
@@ -64,6 +69,9 @@ export async function updateProjectTicketOrder(prevState: ActionState, projectId
 
 
 export async function updateProjectListOrder(prevState: ActionState, projectId: string, lists: List[]) {
+  lists.reverse().map((list, index) => {
+    list.order = index;
+  });
   const url = `/tms/patch-list-order/${projectId}/`;
   const params = {
     lists: lists,
@@ -73,6 +81,9 @@ export async function updateProjectListOrder(prevState: ActionState, projectId: 
 
 
 export async function updateProjectsOrder(prevState: ActionState, projects: ProjectDetail[]) {
+  projects.reverse().map((project, index) => {
+    project.order = index;
+  });
   const url = `/tms/patch-project-order/`;
   const params = {
     projects: projects,
@@ -90,10 +101,11 @@ export async function deleteProject(prevState: ActionState, projectId: string) {
 
 export async function getProjects() {
   try{
-    return await fetchGet({
+    const projects = await fetchGet({
       url: '/tms/projects',
       hasToken: true,
     });
+    return projects.reverse();
   } catch (error) {
     console.error(error);
   }
@@ -112,10 +124,14 @@ export async function getProjectDetail(projectId: string) {
 
 export async function getProjectNestedData(projectId: string) {
   try{
-    return await fetchGet({
+    const getProjectNestedData = await fetchGet({
       url: `/tms/get-nested-project/${projectId}/`,
       hasToken: true,
     });
+    getProjectNestedData.lists.reverse().map((list: List) => {
+      list.tickets.reverse();
+    });
+    return getProjectNestedData;
   } catch (error) {
     console.error(error);
   }
