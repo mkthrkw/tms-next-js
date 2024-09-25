@@ -12,9 +12,3 @@ export type List = {
   order: number,
   tickets: Ticket[]
 };
-
-export type ListModalProps = {
-  listId: string,
-  title: string,
-  color: string,
-};
