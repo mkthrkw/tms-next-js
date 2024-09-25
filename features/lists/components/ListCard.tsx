@@ -1,12 +1,13 @@
 "use client";
 import { Ticket } from "../../tickets/type";
 import { List } from "../type";
-import { TicketCard } from "../../tickets/TicketCard";
+import { TicketCard } from "../../tickets/components/TicketCard";
 import { Sortable } from "@/lib/dnd_kit/Sortable";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { Droppable } from "@/lib/dnd_kit/Droppable";
 import { CSS } from '@dnd-kit/utilities';
 import { HamburgerMenuIcon } from "@/components/icons/svg/HamburgerMenuIcon";
+import { TicketCreateForm } from "@/features/tickets/forms/CreateForm";
 
 export function ListCard({
   list,
@@ -58,6 +59,7 @@ export function ListCard({
             </div>
           </div>
         </div>
+        <TicketCreateForm listId={list.id} />
         {/* Ticket column */}
         <SortableContext items={list.tickets} key={list.id} id={list.id}>
           <Droppable key={list.id} id={list.id}>
