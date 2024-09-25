@@ -1,10 +1,10 @@
 'use client';
 
-import { login, redirectToNextPath, ActionState } from "./actions";
+import { login, redirectToNextPath, ActionState } from "../actions";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthSchemaType, authSchema } from "./schema";
+import { AuthSchemaType, authSchema } from "../schema";
 
 export function LoginForm() {
 
@@ -56,7 +56,7 @@ export function LoginForm() {
             {...register("password")}
             type="password"
             placeholder="password"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full text-base-content"
           />
           {errors.password && <p className="text-error text-xs mt-1">{errors.password.message}</p>}
         </div>
