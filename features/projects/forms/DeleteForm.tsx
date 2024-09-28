@@ -44,7 +44,7 @@ export function ProjectDeleteForm(
           className='btn btn-outline text-red-500/50 hover:border-red-300 hover:bg-red-300'
           onClick={() => dialog.current?.showModal()}
         >
-          削除
+          プロジェクトの削除
         </button>
         <CommonModal
           dialog={dialog}

@@ -1,6 +1,5 @@
 import 'server-only';
 import { getToken } from '../cookies/token';
-import exp from 'constants';
 
 export type Props = {
   url: string,

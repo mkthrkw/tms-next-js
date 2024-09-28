@@ -44,7 +44,7 @@ export function LoginForm() {
           <input
             {...register("email")}
             placeholder="email"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full text-base-content"
           />
           {errors.email && <p className="text-error text-xs mt-1">{errors.email.message}</p>}
         </div>
