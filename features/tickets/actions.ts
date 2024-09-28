@@ -1,6 +1,6 @@
 'use server';
 
-import { fetchDelete, fetchPatch, fetchPost } from "@/util/fetch/methods";
+import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
 import { TicketSchemaType } from "./schema";
 import { ActionState } from "./type";
 
@@ -50,4 +50,17 @@ export async function createTicket(prevState: ActionState, listId: string, input
     list: listId,
   }
   return baseTicketAction(fetchPost, prevState, url, params);
+}
+
+export async function getTicketNestedData(ticketId: string) {
+  try{
+    const ticketNestedData = await fetchGet({
+      url: `/tms/tickets/${ticketId}/`,
+      hasToken: true,
+    });
+    ticketNestedData.comments.reverse();
+    return ticketNestedData;
+  } catch (error) {
+    console.error(error);
+  }
 }

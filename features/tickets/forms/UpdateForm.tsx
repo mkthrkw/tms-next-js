@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 import { updateTicketDescription, updateTicketTitle } from '../actions';
 import { useRouter } from 'next/navigation';
 import { TicketDeleteForm } from './DeleteForm';
+import { CommentColumn } from '@/features/comment/components/CommentColumn';
+import { CommentCreateForm } from '@/features/comment/forms/CreateForm';
 
 export function TicketUpdateForm({
   modalProps,
@@ -36,20 +38,22 @@ export function TicketUpdateForm({
       message: '',
     }
     if(!modalProps) return;
-    if(inputValues.title === modalProps.title && inputValues.description === modalProps.description){
-      return;
-    }
-    const updateTicket = async (initialState:ActionState, ticketId:string, inputValues:TicketSchemaType) => {
-      if(inputValues.title !== modalProps.title){
-        return await updateTicketTitle(initialState, modalProps.id, inputValues.title);
-      }
-      if(inputValues.description !== modalProps.description){
-        return await updateTicketDescription(initialState, modalProps.id, inputValues.description);
-      }
-    }
-    const result = await updateTicket(initialState, modalProps.id, inputValues);
 
+    const isTitleChanged = inputValues.title !== modalProps.title;
+    const isDescriptionChanged = inputValues.description !== modalProps.description;
+    if(!isTitleChanged && !isDescriptionChanged) return;
+
+    const updateTicket = async () => {
+      if(isTitleChanged){
+        return updateTicketTitle(initialState, modalProps.id, inputValues.title);
+      }else{}
+      if(isDescriptionChanged){
+        return updateTicketDescription(initialState, modalProps.id, inputValues.description ?? '');
+      };
+    }
+    const result = await updateTicket();
     if(!result) return;
+
     if(result.state === 'resolved') {
       dialog.current?.close();
       router.refresh();
@@ -68,24 +72,27 @@ export function TicketUpdateForm({
 
   return (
     <>
-      <CommonModal
-        dialog={dialog}
-      >
-        <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-          <input
-            {...register('title', { value:modalProps?.title ?? '' })}
-            className="border-b-2 bg-base-100 mx-2"
-          />
-          {errors.title && <p className="text-error text-xs mt-1">{errors.title.message}</p>}
-          <textarea
-            {...register('description', { value:modalProps?.description ?? '' })}
-            className='textarea textarea-bordered min-h-16 rounded-lg'
-          />
-          {errors.description && <p className="text-error text-xs mt-1">{errors.description.message}</p>}
-        </form>
-        <div className="divider my-6"></div>
-        <TicketDeleteForm ticketId={modalProps?.id ?? ''} underDialog={dialog} />
-      </CommonModal>
+      {modalProps?.id && (
+        <CommonModal
+          dialog={dialog}
+        >
+          <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+            <input
+              {...register('title', { value:modalProps?.title })}
+              className="bg-base-100 mx-2 text-2xl focus:text-lg text-base-content/70 focus:text-base-content focus:outline-none focus:border-b-2 focus:border-primary/80"
+            />
+            {errors.title && <p className="text-error text-xs mt-1">{errors.title.message}</p>}
+            <textarea
+              {...register('description', { value:modalProps?.description })}
+              className='h-16 rounded-lg resize-none p-2 bg-base-100 text-base-content/50 focus:text-base-content focus:outline-none focus:border-2 focus:border-primary/80'
+            />
+            {errors.description && <p className="text-error text-xs mt-1">{errors.description.message}</p>}
+          </form>
+          <CommentColumn ticketId={modalProps.id} />
+          <div className="divider my-6"></div>
+          <TicketDeleteForm ticketId={modalProps.id} underDialog={dialog} />
+        </CommonModal>
+      )}
     </>
   )
 }
