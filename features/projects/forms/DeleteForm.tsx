@@ -50,6 +50,7 @@ export function ProjectDeleteForm(
           dialog={dialog}
           title='プロジェクト削除'
           text='取り消しは出来ませんが、本当に削除しますか？'
+          addClass='w-96'
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <button

@@ -3,11 +3,13 @@ export function CommonModal({
   dialog,
   title,
   text,
+  addClass,
 }:{
   children: React.ReactNode,
   dialog: React.RefObject<HTMLDialogElement>,
   title?: string,
   text?: string,
+  addClass?: string,
 }) {
   const closeHandler = () => {
     dialog.current?.close();
@@ -15,7 +17,7 @@ export function CommonModal({
 
   return (
     <dialog className="modal" ref={dialog}>
-      <div className="modal-box text-center text-base-content bg-base-100 border-base-content border">
+      <div className={"modal-box text-center text-base-content bg-base-100 border-base-content border" + ' ' + addClass}>
         { title && (
           <h3 className="font-bold text-lg mb-4">{ title }</h3>
         )}

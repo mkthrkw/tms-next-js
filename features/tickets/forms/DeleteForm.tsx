@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { ActionState } from '../type';
 import { deleteTicket } from '../actions';
+import { TrashIcon } from '@/components/icons/svg/TrashIcon';
 
 
 export function TicketDeleteForm({
@@ -43,16 +44,18 @@ export function TicketDeleteForm({
 
   return (
     <>
-      <button
-        className='btn btn-outline text-red-500/50 hover:border-red-300 hover:bg-red-300 w-56 self-center'
+      <div
+        className='text-error/80'
         onClick={() => dialog.current?.showModal()}
       >
+        <TrashIcon width={18} height={18} addClass='fill-error/50 stroke-error/50' />
         チケットの削除
-      </button>
+      </div>
       <CommonModal
         dialog={dialog}
         title='チケットの削除'
         text='取り消しは出来ませんが、本当に削除しますか？'
+        addClass='absolute w-96'
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <button
