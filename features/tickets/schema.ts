@@ -9,6 +9,12 @@ export const ticketSchema = z.object({
     .string()
     .max(1000, { message: '説明は1000文字以内で入力してください。' })
     .nullish(),
+  from_period: z
+    .date()
+    .nullish(),
+  to_period: z
+    .date()
+    .nullish(),
 });
 
 export type TicketSchemaType = z.infer<typeof ticketSchema>;

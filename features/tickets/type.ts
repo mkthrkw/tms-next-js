@@ -11,4 +11,6 @@ export type Ticket = {
   from_period: Date,
   to_period: Date,
   order: number,
+  created_at: Date,
+  updated_at: Date,
 };

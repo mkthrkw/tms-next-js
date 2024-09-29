@@ -36,6 +36,12 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
   const ticketDialog = useRef<HTMLDialogElement>(null);
   const [ticketModalProps, setTicketModalProps] = useState<Ticket | null>(null);
   const handleTicketModalOpen = (ticket:Ticket) => {
+    if (ticket.from_period) {
+      ticket.from_period = new Date(ticket.from_period);
+    }
+    if (ticket.to_period) {
+      ticket.to_period = new Date(ticket.to_period);
+    }
     setTicketModalProps(ticket);
     ticketDialog.current?.showModal();
   }
@@ -84,7 +90,7 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
         <ListCreateForm projectId={projectNestedData.id} />
       </div>
       <ListUpdateForm modalProps={listModalProps} dialog={listDialog} />
-      <TicketUpdateForm modalProps={ticketModalProps} dialog={ticketDialog} />
+      <TicketUpdateForm modalProps={ticketModalProps} setTicketModalProps={setTicketModalProps} dialog={ticketDialog} />
     </>
   )
 
