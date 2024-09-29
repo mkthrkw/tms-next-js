@@ -7,9 +7,11 @@ import { CommentUpdateForm } from '../forms/UpdateForm';
 import { EditPen } from '@/components/icons/svg/EditPen';
 
 export function CommentCard({
-  comment
+  comment,
+  ticketId
 }: {
   comment:Comment
+  ticketId:string
 }) {
 
   const [isEditing, setIsEditing] = React.useState(false)
@@ -22,6 +24,7 @@ export function CommentCard({
       {isEditing
         ? <CommentUpdateForm
             comment={comment}
+            ticketId={ticketId}
             setIsEditing={setIsEditing}
           />
         : <>
@@ -43,7 +46,7 @@ export function CommentCard({
                     addClass='fill-primary/10 stroke-primary/10 hover:fill-primary hover:stroke-primary'
                   />
                 </button>
-                <CommentDeleteForm commentId={comment.id}/>
+                <CommentDeleteForm commentId={comment.id} ticketId={ticketId}/>
               </div>
             </div>
           </>

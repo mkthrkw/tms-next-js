@@ -7,8 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { createComment } from '../actions';
 import { PlusIcon } from '@/components/icons/svg/PlusIcon';
-import { CommentUpdateAtContext } from '../components/CommentColumn';
-
+import { SetTicketModalDataContext } from '@/features/lists/components/ListColumn';
 
 export function CommentCreateForm({
   ticketId,
@@ -16,7 +15,7 @@ export function CommentCreateForm({
   ticketId: string,
 }) {
 
-  const setCommentsUpdateAt = React.useContext(CommentUpdateAtContext);
+  const setTicketModalData = React.useContext(SetTicketModalDataContext);
 
   const {
     register,
@@ -35,9 +34,8 @@ export function CommentCreateForm({
     }
     const result = await createComment(initialState, ticketId, inputValues);
     if(result.state === 'resolved') {
-      toast.success('Create Comment success');
       reset();
-      setCommentsUpdateAt(new Date());
+      setTicketModalData(ticketId);
     }
     if (result.state === 'rejected') {
       toast.error(result.message,{autoClose: 3000});

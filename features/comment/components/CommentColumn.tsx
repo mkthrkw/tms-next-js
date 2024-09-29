@@ -1,38 +1,25 @@
 "use client";
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, use, useEffect, useState } from 'react'
 import { CommentCard } from './CommentCard'
 import { getTicketNestedData } from '@/features/tickets/actions';
 import { Comment } from '../type';
 import { CommentCreateForm } from '../forms/CreateForm';
-
-export const CommentUpdateAtContext = createContext((updateAt:Date) => {});
+import { TicketNestedData } from '@/features/tickets/type';
 
 export function CommentColumn({
-  ticketId
+  modalProps
 }: {
-  ticketId:string
+  modalProps:TicketNestedData | null
 }) {
-
-  const [commentsUpdateAt, setCommentsUpdateAt] = useState<Date>(new Date());
-  const [comments, setComments] = useState<Comment[]>([]);
-    useEffect(() => {
-      const fetchData = async () => {
-        const ticketNestedData = await getTicketNestedData(ticketId);
-        setComments(ticketNestedData.comments);
-      }
-    if(ticketId) fetchData();
-  }, [commentsUpdateAt]);
 
   return (
     <>
-      {comments && (
+      {modalProps?.comments && (
         <div className='flex flex-col py-2 gap-2'>
-          <CommentUpdateAtContext.Provider value={setCommentsUpdateAt}>
-            <CommentCreateForm ticketId={ticketId} />
-            {comments.map((comment) => (
-              <CommentCard  comment={comment} key={comment.id}/>
+            <CommentCreateForm ticketId={modalProps?.id ?? ''} />
+            { modalProps?.comments.map((comment:Comment) => (
+              <CommentCard comment={comment} ticketId={modalProps?.id ?? ''} key={comment.id}/>
             ))}
-          </CommentUpdateAtContext.Provider>
         </div>
       )}
     </>

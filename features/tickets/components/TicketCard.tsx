@@ -1,17 +1,17 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import { Ticket } from "../type";
-import { TicketModalContext } from "@/features/lists/components/ListColumn";
+import { OpenTicketModalContext } from "@/features/lists/components/ListColumn";
 import { getDateOnlyShortStyle } from "@/lib/tempo/actions";
 
 export function TicketCard({ ticket }: { ticket: Ticket }) {
 
-  const openTicketModal = useContext(TicketModalContext);
+  const openTicketModal = useContext(OpenTicketModalContext);
   const hasPeriod = ticket.from_period || ticket.to_period;
 
   return (
     <button
-      onClick={() => openTicketModal(ticket)}
+      onClick={() => openTicketModal(ticket.id)}
       className="text-left w-full shadow-sm rounded-xl px-4 py-1 bg-base-100 text-base-content h-16 overflow-y-hidden"
     >
       <h4 className="text-lg border-b-2 border-base-200/20">{ticket.title}</h4>

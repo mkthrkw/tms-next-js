@@ -7,7 +7,7 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { createContext, useEffect, useRef, useState } from 'react';
 import { customClosestCorners } from '@/lib/dnd_kit/customClosestCorners';
 import { TicketCard } from '@/features/tickets/components/TicketCard';
-import { Ticket } from '@/features/tickets/type';
+import { Ticket, TicketNestedData } from '@/features/tickets/type';
 import {
   getMovedLists,
   getMovedTicketsOtherContainer,
@@ -18,9 +18,11 @@ import {
 import { ListCreateForm } from '../forms/CreateForm';
 import { ListUpdateForm } from '../forms/UpdateForm';
 import { TicketUpdateForm } from '@/features/tickets/forms/UpdateForm';
+import { getTicketNestedData } from '@/features/tickets/actions';
 
 
-export const TicketModalContext = createContext((ticket:Ticket) => {});
+export const OpenTicketModalContext = createContext((ticketId:string) => {});
+export const SetTicketModalDataContext = createContext((ticketId:string) => {});
 
 export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedData}) {
   const [lists, setLists] = useState<List[]>(projectNestedData.lists);
@@ -34,15 +36,19 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
   }
 
   const ticketDialog = useRef<HTMLDialogElement>(null);
-  const [ticketModalProps, setTicketModalProps] = useState<Ticket | null>(null);
-  const handleTicketModalOpen = (ticket:Ticket) => {
-    if (ticket.from_period) {
-      ticket.from_period = new Date(ticket.from_period);
+  const [ticketModalProps, setTicketModalProps] = useState<TicketNestedData | null>(null);
+  const setTicketNestedData = async (ticketId:string) => {
+    const ticketNestedData:TicketNestedData = await getTicketNestedData(ticketId);
+    if (ticketNestedData.from_period) {
+      ticketNestedData.from_period = new Date(ticketNestedData.from_period);
     }
-    if (ticket.to_period) {
-      ticket.to_period = new Date(ticket.to_period);
+    if (ticketNestedData.to_period) {
+      ticketNestedData.to_period = new Date(ticketNestedData.to_period);
     }
-    setTicketModalProps(ticket);
+    setTicketModalProps(ticketNestedData);
+  };
+  const handleTicketModalOpen = (ticketId:string) => {
+    setTicketNestedData(ticketId);
     ticketDialog.current?.showModal();
   }
 
@@ -74,11 +80,11 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
           id={projectNestedData.id}
           key={projectNestedData.id}
         >
-          <TicketModalContext.Provider value={handleTicketModalOpen}>
+          <OpenTicketModalContext.Provider value={handleTicketModalOpen}>
           {lists.map((list:List) => (
             <ListCard list={list} key={list.id} handleListModalOpen={handleListModalOpen} />
           ))}
-          </TicketModalContext.Provider>
+          </OpenTicketModalContext.Provider>
         </SortableContext>
         {activeTicket && (
           <DragOverlay>
@@ -90,7 +96,9 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
         <ListCreateForm projectId={projectNestedData.id} />
       </div>
       <ListUpdateForm modalProps={listModalProps} dialog={listDialog} />
-      <TicketUpdateForm modalProps={ticketModalProps} setTicketModalProps={setTicketModalProps} dialog={ticketDialog} />
+      <SetTicketModalDataContext.Provider value={setTicketNestedData}>
+        <TicketUpdateForm modalProps={ticketModalProps} setTicketModalProps={setTicketModalProps} dialog={ticketDialog} />
+      </SetTicketModalDataContext.Provider>
     </>
   )
 

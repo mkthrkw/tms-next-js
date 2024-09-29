@@ -1,7 +1,7 @@
 "use client";
 import { CommonModal } from '@/components/modals/CommonModal';
 import React, { useEffect } from 'react'
-import { ActionState, Ticket } from '../type';
+import { ActionState, Ticket, TicketNestedData } from '../type';
 import { Controller, useForm } from 'react-hook-form';
 import { ticketSchema, TicketSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,8 +20,8 @@ export function TicketUpdateForm({
   setTicketModalProps,
   dialog,
 }:{
-  modalProps:Ticket | null,
-  setTicketModalProps:React.Dispatch<React.SetStateAction<Ticket | null>>,
+  modalProps:TicketNestedData | null,
+  setTicketModalProps:React.Dispatch<React.SetStateAction<TicketNestedData | null>>,
   dialog:React.RefObject<HTMLDialogElement>
 }) {
 
@@ -89,7 +89,7 @@ export function TicketUpdateForm({
     <>
         <CommonModal
           dialog={dialog}
-          addClass='px-2 overflow-hidden pb-1 min-w-96'
+          addClass='px-2 overflow-hidden pb-1'
         >
           <div className='px-4 border-b'>
             <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-1">
@@ -153,7 +153,7 @@ export function TicketUpdateForm({
             </form>
           </div>
           <div className='h-[60vh] overflow-auto px-4'>
-            <CommentColumn ticketId={modalProps?.id ?? ''} />
+            <CommentColumn modalProps={modalProps} />
           </div>
           <div className='flex justify-between items-center px-4 border-t pt-1'>
             <div className='flex flex-col text-xs text-base-content/50'>

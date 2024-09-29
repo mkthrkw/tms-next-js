@@ -6,15 +6,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { CommentSchemaType, commentSchema } from '../schema';
 import { updateComment } from '../actions';
-import { CommentUpdateAtContext } from '../components/CommentColumn';
 import { SaveIcon } from '@/components/icons/svg/SaveIcon';
 import { CancelIcon } from '@/components/icons/svg/CancelIcon';
+import { SetTicketModalDataContext } from '@/features/lists/components/ListColumn';
 
 export function CommentUpdateForm({
   comment,
+  ticketId,
   setIsEditing
 }:{
   comment:Comment,
+  ticketId:string,
   setIsEditing:React.Dispatch<React.SetStateAction<boolean>>
 }) {
 
@@ -27,7 +29,7 @@ export function CommentUpdateForm({
       resolver: zodResolver(commentSchema),
   });
 
-  const setCommentsUpdateAt = useContext(CommentUpdateAtContext);
+  const setTicketModalData = useContext(SetTicketModalDataContext);
 
   const onSubmit = async (inputValues:CommentSchemaType) => {
     const initialState:ActionState = {
@@ -36,7 +38,7 @@ export function CommentUpdateForm({
     }
     const result = await updateComment(initialState, comment.id, inputValues);
     if(result.state === 'resolved') {
-      setCommentsUpdateAt(new Date());
+      setTicketModalData(ticketId);
       setIsEditing(false);
     }
     if (result.state === 'rejected') {
