@@ -63,7 +63,7 @@ export function ListCard({
         {/* Ticket column */}
         <SortableContext items={list.tickets} key={list.id} id={list.id}>
           <Droppable key={list.id} id={list.id}>
-            <div className="min-h-[73vh] flex flex-col gap-2 p-2">
+            <div className="min-h-[70vh] flex flex-col gap-2 p-2">
               {list.tickets.map((ticket:Ticket) => (
                 <Sortable key={ticket.id} id={ticket.id}>
                   <TicketCard ticket={ticket} />

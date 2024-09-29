@@ -55,7 +55,7 @@ export function TicketDeleteForm({
         dialog={dialog}
         title='チケットの削除'
         text='取り消しは出来ませんが、本当に削除しますか？'
-        addClass='absolute w-96'
+        addClass='m-auto inset-0 fixed h-fit w-fit justify-self-center'
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <button

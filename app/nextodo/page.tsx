@@ -8,9 +8,9 @@ export default async function Page() {
 
   return (
     <>
-      <div className="p-8 w-full h-full">
+      <div className="py-8 px-4 w-full h-full">
         <h1 className="text-4xl text-center mb-10">This is ProjectList</h1>
-        <div className="flex flex-col gap-3 mx-auto justify-between max-w-2xl">
+        <div className="flex flex-col gap-3 mx-auto justify-between max-w-md">
           <ProjectColumn projects={projects}/>
         </div>
       </div>

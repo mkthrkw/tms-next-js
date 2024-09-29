@@ -92,7 +92,7 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
           </DragOverlay>
         )}
       </DndContext>
-      <div className="fixed bottom-6 right-5">
+      <div className="absolute bottom-3 right-3">
         <ListCreateForm projectId={projectNestedData.id} />
       </div>
       <ListUpdateForm modalProps={listModalProps} dialog={listDialog} />

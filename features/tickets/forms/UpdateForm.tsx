@@ -91,11 +91,11 @@ export function TicketUpdateForm({
           dialog={dialog}
           addClass='px-2 overflow-hidden pb-1'
         >
-          <div className='px-4 border-b'>
-            <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-1">
+          <div className='flex px-4 border-b'>
+            <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-1 w-full">
               <input
                 {...register('title', { value:modalProps?.title })}
-                className="bg-base-100 mx-2 text-2xl focus:text-lg text-base-content/70 focus:text-base-content focus:outline-none focus:border-b-2 focus:border-primary/80"
+                className="bg-base-100 px-2 text-xl text-base-content/70 focus:text-base-content focus:outline-none focus:border-b-2 focus:border-primary/80"
               />
               {errors.title && <p className="text-error text-xs mt-1">{errors.title.message}</p>}
               <textarea
@@ -152,10 +152,10 @@ export function TicketUpdateForm({
               </div>
             </form>
           </div>
-          <div className='h-[60vh] overflow-auto px-4'>
+          <div className='h-[80vh] overflow-auto px-4'>
             <CommentColumn modalProps={modalProps} />
           </div>
-          <div className='flex justify-between items-center px-4 border-t pt-1'>
+          <div className='flex justify-between items-center px-4 border-t py-1 h-10 absolute bottom-0 left-0 bg-base-100 w-full'>
             <div className='flex flex-col text-xs text-base-content/50'>
               <div>作成日時：{getDateTimeFullStyle(modalProps?.created_at)}</div>
               <div>更新日時：{getDateTimeFullStyle(modalProps?.updated_at)}</div>

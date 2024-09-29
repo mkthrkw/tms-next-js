@@ -10,7 +10,7 @@ export function ToastProvider(
     <>
       {children}
       <ToastContainer
-        toastClassName={"rounded-lg min-w-96 text-center"}
+        toastClassName={"rounded-2xl w-80 text-center text-sm mx-auto mb-2"}
         position="bottom-center"
         autoClose={1000}
         hideProgressBar={false}

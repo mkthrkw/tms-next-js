@@ -71,6 +71,7 @@ export function ListUpdateForm({
       <CommonModal
         dialog={dialog}
         title={'リストの編集'}
+        addClass='overflow-hidden'
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <label className="label">リスト名</label>

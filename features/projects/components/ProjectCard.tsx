@@ -26,7 +26,7 @@ export function ProjectCard({projectDetail}:{projectDetail: ProjectDetail} ) {
     <div
       ref={setNodeRef}
       style={style}
-      className="h-24 flex flex-row items-center rounded-xl min-w-[23rem] shadow-sm"
+      className="h-24 flex flex-row items-center rounded-xl shadow-sm w-full"
     >
       <div
         ref={setActivatorNodeRef}

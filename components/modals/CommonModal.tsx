@@ -16,7 +16,7 @@ export function CommonModal({
   }
 
   return (
-    <dialog className="modal" ref={dialog}>
+    <dialog className="modal w-screen h-screen" ref={dialog}>
       <div className={"modal-box text-center text-base-content bg-base-100 border-base-content border" + ' ' + addClass}>
         { title && (
           <h3 className="font-bold text-lg mb-4">{ title }</h3>
@@ -30,7 +30,11 @@ export function CommonModal({
         { children }
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button>close</button>
+        <button
+          onClick={closeHandler}
+        >
+          close
+        </button>
       </form>
     </dialog>
   );
