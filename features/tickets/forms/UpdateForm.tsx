@@ -14,6 +14,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { dayStart, tzDate } from '@formkit/tempo';
 import { getDateOnlyShortStyle, getDateTimeFullStyle } from '@/lib/tempo/actions';
+import { CompleteBadge } from '@/components/common/CompleteBadge';
 
 export function TicketUpdateForm({
   modalProps,
@@ -31,17 +32,18 @@ export function TicketUpdateForm({
     getValues,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<TicketSchemaType>({
       mode: 'onBlur',
       resolver: zodResolver(ticketSchema),
   });
 
+  const initialState:ActionState = {
+    state: 'pending',
+    message: '',
+  };
+
   const onSubmit = async (inputValues: TicketSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
     if(!modalProps) return;
 
     const changedParams = Object.entries(inputValues).find(([key,value]) => {
@@ -82,15 +84,53 @@ export function TicketUpdateForm({
       setValue('description', modalProps.description);
       setValue('from_period', modalProps.from_period);
       setValue('to_period', modalProps.to_period);
+      setCompleted(modalProps.completed);
     }
   }, [modalProps]);
+
+  const [completed, setCompleted] = React.useState(modalProps?.completed ?? false);
+  const handleToggleComplete = async (event:React.ChangeEvent<HTMLInputElement>) => {
+    const message = `このチケットを${completed ? '未完了' : '完了'}しますか？`;
+    if(!modalProps?.id || !window.confirm(message)){
+      event?.preventDefault();
+      return;
+    }
+    const result = await updateTicket(initialState, modalProps.id, {completed:!completed});
+    if(!result) return;
+    if(result.state === 'resolved') {
+      setCompleted(!completed);
+      setTicketModalProps((prev) => {
+        if(!prev) return null;
+        return {
+          ...prev,
+          completed: !completed,
+          updated_at:new Date()
+        };
+      });
+    }
+    if (result.state === 'rejected') {
+      toast.error(result.message,{autoClose: 3000});
+    }
+  }
 
   return (
     <>
         <CommonModal
           dialog={dialog}
-          addClass='px-2 overflow-hidden pb-1'
+          addClass='px-2 overflow-hidden pb-1 pt-3 min-h-[80vh] max-h-[95vh]'
         >
+          <div className='flex justify-between px-4 text-base-content/40 pb-2'>
+            <div>#{modalProps?.display_id}</div>
+            <div className='flex items-center gap-2 mr-10'>
+              <input
+                type="checkbox"
+                className="toggle toggle-success toggle-sm"
+                checked={completed}
+                onChange={handleToggleComplete}
+              />
+              <CompleteBadge completed={completed} />
+            </div>
+          </div>
           <div className='flex px-4 border-b'>
             <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-1 w-full">
               <input
@@ -152,11 +192,11 @@ export function TicketUpdateForm({
               </div>
             </form>
           </div>
-          <div className='h-[80vh] overflow-auto px-4'>
+          <div className='overflow-auto max-h-[70vh] px-4 pb-16'>
             <CommentColumn modalProps={modalProps} />
           </div>
-          <div className='flex justify-between items-center px-4 border-t py-1 h-10 absolute bottom-0 left-0 bg-base-100 w-full'>
-            <div className='flex flex-col text-xs text-base-content/50'>
+          <div className='flex justify-between items-center px-4 border-t h-12 absolute bottom-0 left-0 bg-base-100 w-full'>
+            <div className='flex flex-col text-xs text-base-content/50 text-left'>
               <div>作成日時：{getDateTimeFullStyle(modalProps?.created_at)}</div>
               <div>更新日時：{getDateTimeFullStyle(modalProps?.updated_at)}</div>
             </div>

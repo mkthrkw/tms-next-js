@@ -13,6 +13,7 @@ export type Ticket = {
   from_period: Date,
   to_period: Date,
   order: number,
+  display_id: number,
 };
 
 export type TicketNestedData = {
@@ -23,6 +24,7 @@ export type TicketNestedData = {
   from_period: Date,
   to_period: Date,
   order: number,
+  display_id: number,
   created_at: Date,
   updated_at: Date,
   comments: Comment[],
