@@ -11,9 +11,14 @@ export function ThemeSelector() {
     themeChange(false) // false parameter is required for react project
   }, [])
 
+  const handleThemeChange = (theme: string) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+
   const ThemeCard = ({ theme, name }: { theme: string, name: string }) => {
     return (
-      <button className="text-start outline-offset-4" data-set-theme={theme} data-act-class="ACTIVECLASS">
+      <button className="text-start outline-offset-4" onClick={() => handleThemeChange(theme)}>
         <span className="border border-base-content/20 bg-base-100 rounded-btn text-base-content block w-full cursor-pointer font-sans" data-theme={theme}>
           <span className="grid grid-cols-5 grid-rows-3">
             <span className="col-span-5 row-span-3 row-start-1 flex items-center gap-2 px-4 py-3">

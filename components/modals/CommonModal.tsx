@@ -1,3 +1,5 @@
+import { useRouter } from "next/navigation";
+
 export function CommonModal({
   children,
   dialog,
@@ -11,8 +13,10 @@ export function CommonModal({
   text?: string,
   addClass?: string,
 }) {
+  const router = useRouter();
   const closeHandler = () => {
     dialog.current?.close();
+    router.refresh()
   }
 
   return (
