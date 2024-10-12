@@ -1,12 +1,10 @@
 "use client";
 
-import { ActionState, User } from "../type";
-import { updateUser } from "../actions";
+import { User } from "../type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { userSchema, UserSchemaType } from "../schema";
+import { useUserInput } from "../hooks/useUserInput";
 
 export function UserUpdateForm({user}:{user:User}) {
 
@@ -18,24 +16,8 @@ export function UserUpdateForm({user}:{user:User}) {
       mode: 'onBlur',
       resolver: zodResolver(userSchema),
   });
-  const router = useRouter();
 
-  const onSubmit = async (inputValues: UserSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await updateUser(initialState, inputValues);
-    if(result.state === 'resolved') {
-      toast.success('Update project success');
-      router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
-
-
+  const { onSubmit } = useUserInput(user);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
