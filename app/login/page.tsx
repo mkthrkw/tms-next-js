@@ -1,10 +1,8 @@
 import { LoginForm } from '@/features/auth/components/Form';
-import { RefreshLoginModal } from '@/features/auth/components/Modal';
 
 export default function Page() {
   return (
     <>
-      <RefreshLoginModal />
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left text-base-content/60">
