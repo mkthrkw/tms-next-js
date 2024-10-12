@@ -7,6 +7,8 @@ export const authSchema = z.object({
   password: z
     .string()
     .min(8, { message: "8文字以上で入力してください" }),
+  rememberMe: z
+    .boolean()
 });
 
 

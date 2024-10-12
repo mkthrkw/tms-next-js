@@ -1,10 +1,9 @@
 'use client';
 
-import { login, redirectToNextPath, ActionState } from "../actions";
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthSchemaType, authSchema } from "../schema";
+import { useOnSubmit } from "../hooks/useOnSubmit";
 
 export function LoginForm() {
 
@@ -19,20 +18,7 @@ export function LoginForm() {
     }
   );
 
-  const onSubmit = async (data: AuthSchemaType) => {
-    const initialState: ActionState = {
-      state: 'pending',
-      message: '',
-    };
-    const result = await login(initialState, data);
-    if(result.state === 'resolved') {
-      toast.success('Login success');
-      redirectToNextPath();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+  const { onSubmit } = useOnSubmit();
 
   return (
     <>
@@ -59,6 +45,16 @@ export function LoginForm() {
             className="input input-bordered w-full text-base-content"
           />
           {errors.password && <p className="text-error text-xs mt-1">{errors.password.message}</p>}
+        </div>
+        <div className="form-control">
+          <label className="label cursor-pointer justify-end gap-4">
+            <span className="label-text">Remember me</span>
+            <input
+              {...register("rememberMe")}
+              type="checkbox"
+              className="toggle toggle-primary"
+            />
+          </label>
         </div>
         <div className="form-control mt-6">
           <button className="btn btn-secondary" disabled={isSubmitting}>Login</button>
