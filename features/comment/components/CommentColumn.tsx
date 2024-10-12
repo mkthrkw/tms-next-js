@@ -13,7 +13,7 @@ export function CommentColumn({
 }) {
 
   return (
-    <>
+    <div className='pb-4'>
       {modalProps?.comments && (
         <div className='flex flex-col py-2 gap-2'>
             <CommentCreateForm ticketId={modalProps?.id ?? ''} />
@@ -22,6 +22,6 @@ export function CommentColumn({
             ))}
         </div>
       )}
-    </>
+    </div>
   )
 }

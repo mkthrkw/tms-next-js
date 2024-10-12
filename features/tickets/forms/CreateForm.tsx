@@ -38,7 +38,7 @@ export function TicketCreateForm({
     const result = await createTicket(initialState, listId, inputValues);
     if(result.state === 'resolved') {
       setIsOpen(false);
-      toast.success('Create List success');
+      toast.success('Create Ticket success');
       reset();
       router.refresh();
     }

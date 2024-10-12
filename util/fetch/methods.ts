@@ -48,8 +48,8 @@ export async function fetchGet({
   hasToken = false,
   customErrorMessage = {},
 }: Props) {
-  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
-  let fetchProps: FetchProps = {
+  const fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
+  const fetchProps: FetchProps = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -71,8 +71,8 @@ export async function fetchPost({
   params = undefined,
   customErrorMessage = {},
 }: Props) {
-  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
-  let fetchProps: FetchProps = {
+  const fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
+  const fetchProps: FetchProps = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -97,8 +97,8 @@ export async function fetchPatch({
   params = undefined,
   customErrorMessage = {},
 }: Props) {
-  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
-  let fetchProps: FetchProps = {
+  const fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
+  const fetchProps: FetchProps = {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -122,8 +122,8 @@ export async function fetchDelete({
   hasToken = false,
   customErrorMessage = {},
 }: Props) {
-  let fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
-  let fetchProps: FetchProps = {
+  const fetchUrl = process.env.BACKEND_API_SERVER_URL + url;
+  const fetchProps: FetchProps = {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
