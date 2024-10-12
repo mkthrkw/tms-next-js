@@ -1,61 +1,21 @@
 "use client";
 
-import { ActionState, User } from '../type';
+import { useUserAvatar } from '../hooks/useUserAvatar';
+import { User } from '../type';
 import { CameraIcon } from '@/components/icons/svg/CameraIcon';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 import defaultImg from '@/public/images/project/default.jpeg';
-import { useEffect, useRef, useState } from 'react';
-import { updateUserAvatar } from '../actions';
+
 
 export function UserAvatarForm({user}:{user:User}) {
 
-  const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [imageSrc, setImageSrc] = useState<string | undefined>(defaultImg.src);
-
-  useEffect(() => {
-    if(user.image_url){
-      setImageSrc(user.image_url);
-    }
-  }, [user.image_url]);
-
-  const uploadAvatar = async (fileString: string) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await updateUserAvatar(initialState, user.id, fileString);
-    if(result.state === 'resolved') {
-      toast.success('Update projectAvatar success');
-      router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
-
-  const handleChange = async () => {
-    const file = inputRef.current?.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if(!reader.result){
-        toast.error('ファイルの読み込みに失敗しました。');
-        return;
-      }
-      uploadAvatar(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  }
+  const {inputRef, handleChange} = useUserAvatar(user);
 
   return (
     <div className='text-center'>
       <div className="avatar">
         <div className="w-40 mask mask-squircle bg-base-200">
           <img
-            src={imageSrc}
+            src={user.image_url ?? defaultImg.src}
             width="150"
             height="150"
             alt="avatar"

@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { getUser } from '../actions';
+import { User } from '../type';
 
 export async function UserMenu() {
-  const user = await getUser();
+  const user:User = await getUser();
 
   return (
     <div className="tooltip tooltip-left" data-tip="ユーザーの編集">
