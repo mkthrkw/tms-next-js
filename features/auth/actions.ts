@@ -42,7 +42,7 @@ export async function refreshLogin(refreshToken: string) {
     });
     return response;
   } catch (error: any) {
-    return;
+    return false;
   }
 }
 

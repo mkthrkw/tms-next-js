@@ -4,7 +4,7 @@ import { AuthSchemaType } from "../schema";
 import { ActionState } from "../type";
 
 
-export const useOnSubmit = () => {
+export const useLoginAction = () => {
 
   const onSubmit = async (data: AuthSchemaType) => {
     const initialState: ActionState = {

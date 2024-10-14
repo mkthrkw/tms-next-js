@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthSchemaType, authSchema } from "../schema";
-import { useOnSubmit } from "../hooks/useOnSubmit";
+import { useLoginAction } from "../hooks/useLoginAction";
 
 export function LoginForm() {
 
@@ -18,7 +18,7 @@ export function LoginForm() {
     }
   );
 
-  const { onSubmit } = useOnSubmit();
+  const { onSubmit } = useLoginAction();
 
   return (
     <>
