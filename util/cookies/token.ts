@@ -1,10 +1,13 @@
+"use server";
 import { cookies } from "next/headers";
+import { decodeBase64, encodeBase64 } from "@/util/common/base64";
+
 
 // ========== access token ==========
-export function getTokenSetProps(value: string) {
+export async function getTokenSetProps(value: string) {
   return {
     name: "token",
-    value: btoa(String(value)),
+    value: encodeBase64(String(value)),
     maxAge: Number(process.env.TOKEN_MAX_AGE),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -12,7 +15,7 @@ export function getTokenSetProps(value: string) {
   };
 }
 
-export function getTokenRemoveProps() {
+export async function getTokenRemoveProps() {
   return {
     name: "token",
     value: "",
@@ -23,50 +26,52 @@ export function getTokenRemoveProps() {
   };
 }
 
-export function setToken(value: string) {
-  cookies().set(getTokenSetProps(value));
+export async function setToken(value: string) {
+  cookies().set(await getTokenSetProps(value));
 }
 
-export function removeToken() {
-  cookies().set(getTokenRemoveProps());
+export async function removeToken() {
+  cookies().set(await getTokenRemoveProps());
 }
 
-export function getToken() {
+export async function getToken() {
   const token = cookies().get('token')?.value;
-  if(token) return atob(String(token));
+  if(token) return decodeBase64(String(token));
 }
 
 
 // ========== refresh token ==========
-export function getRefreshTokenSetProps(value: string) {
+export async function getRefreshTokenSetProps(value: string) {
   return {
     name: "refreshToken",
-    value: btoa(String(value)),
+    value: encodeBase64(String(value)),
     maxAge: Number(process.env.REFRESH_TOKEN_MAX_AGE),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite:'lax' as 'lax',
   };
 }
 
-export function getRefreshTokenRemoveProps() {
+export async function getRefreshTokenRemoveProps() {
   return {
     name: "refreshToken",
     value: "",
     maxAge: 0,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite:'lax' as 'lax',
   };
 }
 
-export function setRefreshToken(value: string) {
-  cookies().set(getRefreshTokenSetProps(value));
+export async function setRefreshToken(value: string) {
+  cookies().set(await getRefreshTokenSetProps(value));
 }
 
-export function removeRefreshToken() {
-  cookies().set(getRefreshTokenRemoveProps());
+export async function removeRefreshToken() {
+  cookies().set(await getRefreshTokenRemoveProps());
 }
 
-export function getRefreshToken() {
+export async function getRefreshToken() {
   const refreshToken = cookies().get('refreshToken')?.value;
-  if(refreshToken) return atob(String(refreshToken));
+  if(refreshToken) return decodeBase64(String(refreshToken));
 }

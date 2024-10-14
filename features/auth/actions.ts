@@ -53,7 +53,7 @@ export async function logout(prevState: ActionState) {
 }
 
 export async function redirectToNextPath() {
-  const nextPath = getNextPath() ?? '/nextodo';
-  removeNextPath();
+  const nextPath = await getNextPath() ?? '/nextodo';
+  await removeNextPath();
   redirect(String(nextPath));
 }

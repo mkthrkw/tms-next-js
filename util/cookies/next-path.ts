@@ -1,13 +1,14 @@
+"use server";
 import { cookies } from "next/headers";
 
-export function getNextPathSetProps(value: string) {
+export async function getNextPathSetProps(value: string) {
   return {
     name: "nextPath",
     value: value,
   };
 }
 
-export function getNextPathRemoveProps() {
+export async function getNextPathRemoveProps() {
   return {
     name: "nextPath",
     value: "",
@@ -15,14 +16,14 @@ export function getNextPathRemoveProps() {
   };
 }
 
-export function setNextPath(value: string) {
-  cookies().set(getNextPathSetProps(value));
+export async function setNextPath(value: string) {
+  cookies().set(await getNextPathSetProps(value));
 }
 
-export function removeNextPath() {
-  cookies().set(getNextPathRemoveProps());
+export async function removeNextPath() {
+  cookies().set(await getNextPathRemoveProps());
 }
 
-export function getNextPath() {
+export async function getNextPath() {
   return cookies().get('nextPath')?.value;
 }

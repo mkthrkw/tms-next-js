@@ -6,22 +6,22 @@ import { refreshLogin } from './features/auth/actions';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-  const token = getToken();
+  const token = await getToken();
   if (token) {
     return NextResponse.next();
   }
-  const refreshToken = getRefreshToken();
+  const refreshToken = await getRefreshToken();
   if(refreshToken){
     const result = await refreshLogin(refreshToken);
     if(result){
       const next = NextResponse.next();
-      next.cookies.set(getTokenSetProps(result.access));
-      next.cookies.set(getRefreshTokenSetProps(result.refresh));
+      next.cookies.set(await getTokenSetProps(result.access));
+      next.cookies.set(await getRefreshTokenSetProps(result.refresh));
       return next;
     }
   }
   const redirectResponse = NextResponse.redirect(new URL('/login', request.url));
-  redirectResponse.cookies.set(getNextPathSetProps(request.nextUrl.pathname));
+  redirectResponse.cookies.set(await getNextPathSetProps(request.nextUrl.pathname));
   return redirectResponse;
 }
 

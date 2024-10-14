@@ -56,7 +56,7 @@ export async function fetchGet({
     },
   };
   if (hasToken) {
-    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
+    fetchProps.headers['Authorization'] = `Bearer ${await getToken()}`;
   };
   return fetchBase(fetchUrl, fetchProps, customErrorMessage);
 }
@@ -79,7 +79,7 @@ export async function fetchPost({
     },
   };
   if (hasToken) {
-    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
+    fetchProps.headers['Authorization'] = `Bearer ${await getToken()}`;
   };
   if (params) {
     fetchProps.body = JSON.stringify(params);
@@ -105,7 +105,7 @@ export async function fetchPatch({
     },
   };
   if (hasToken) {
-    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
+    fetchProps.headers['Authorization'] = `Bearer ${await getToken()}`;
   };
   if (params) {
     fetchProps.body = JSON.stringify(params);
@@ -130,7 +130,7 @@ export async function fetchDelete({
     },
   };
   if (hasToken) {
-    fetchProps.headers['Authorization'] = `Bearer ${getToken()}`;
+    fetchProps.headers['Authorization'] = `Bearer ${await getToken()}`;
   };
   return fetchBase(fetchUrl, fetchProps, customErrorMessage);
 }
