@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useRef } from 'react'
-import { ActionState, ProjectDetail } from '../type'
+import { ProjectDetail } from '../type'
 import { CommonModal } from '@/components/modals/CommonModal'
 import { deleteProject } from '../actions';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { useActionHandler } from '@/hooks/useActionHandler';
 
 
 export function ProjectDeleteForm(
@@ -15,27 +14,15 @@ export function ProjectDeleteForm(
   const dialog = useRef<HTMLDialogElement>(null);
   const router = useRouter();
 
-  const {
-    handleSubmit,
-    formState:{ isSubmitting },
-  } = useForm();
-
-  const onSubmit = async () => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await deleteProject(initialState, projectDetail.id);
-    if(result.state === 'resolved') {
-      toast.success('Delete project success');
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: deleteProject,
+    onSuccess: () => {
       dialog.current?.close();
       router.push('/nextodo');
       router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+    },
+    onSuccessMessage: 'Delete project success',
+  });
 
   return (
     <>
@@ -51,15 +38,14 @@ export function ProjectDeleteForm(
           title='プロジェクト削除'
           text='取り消しは出来ませんが、本当に削除しますか？'
           addClass='w-fit'
+          isSubmitting={isSubmitting}
         >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <button
-              className='btn btn-outline btn-error btn-wide'
-              disabled={isSubmitting}
-            >
-              削除実行
-            </button>
-          </form>
+          <button
+            className='btn btn-outline btn-error btn-wide'
+            onClick={() => handleAction(projectDetail.id)}
+          >
+            削除実行
+          </button>
         </CommonModal>
       </div>
     </>

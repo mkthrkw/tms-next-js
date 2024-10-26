@@ -1,15 +1,16 @@
 'use server';
 
 import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
-import { ActionState, ProjectDetail } from "./type";
+import { ProjectDetail } from "./type";
 import { ProjectSchemaType } from "./schema";
 import { uploadImage } from "@/lib/cloudinary/actions";
 import { List } from "../lists/type";
+import { ActionState } from "@/types/actionType";
 
 
-function baseProjectAction(func: Function, prevState: ActionState, url: string, params: any) {
+async function baseProjectAction(func: Function, prevState: ActionState, url: string, params: any) {
   try {
-    func({
+    await func({
       url: url,
       hasToken: true,
       params: params,
@@ -24,37 +25,53 @@ function baseProjectAction(func: Function, prevState: ActionState, url: string, 
 }
 
 
-export async function createProject(prevState: ActionState, inputValues: ProjectSchemaType) {
+export async function createProject(
+  prevState: ActionState,
+  inputValues: ProjectSchemaType
+) {
   const url = '/tms/projects/';
   const params = {
     name: inputValues.name,
     description: inputValues.description,
   }
-  return baseProjectAction(fetchPost, prevState, url, params);
+  return await baseProjectAction(fetchPost, prevState, url, params);
 }
 
 
-export async function updateProject(prevState: ActionState, projectId:string, inputValues: ProjectSchemaType) {
+export async function updateProject(
+  prevState: ActionState,
+  inputValues: ProjectSchemaType,
+  projectId: string
+) {
   const url = `/tms/projects/${projectId}/`;
   const params = {
     name: inputValues.name,
     description: inputValues.description,
   }
-  return baseProjectAction(fetchPatch, prevState, url, params);
+  return await baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
-export async function updateProjectAvatar(prevState: ActionState, projectId: string, fileData: string) {
-  const results = await uploadImage(fileData, projectId);
-  const url = `/tms/projects/${projectId}/`;
+export async function updateProjectAvatar(
+  prevState: ActionState,
+  fileString: string,
+  id: string
+) {
+  const results = await uploadImage(fileString, id);
+  console.log(results);
+  const url = `/tms/projects/${id}/`;
   const params = {
     image_url: results.secure_url,
   }
-  return baseProjectAction(fetchPatch, prevState, url, params);
+  return await baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
-export async function updateProjectTicketOrder(prevState: ActionState, projectId: string, lists: List[]) {
+export async function updateProjectTicketOrder(
+  prevState: ActionState,
+  lists: List[],
+  projectId: string,
+) {
   lists.reverse().map((list) => {
     list.tickets.reverse().map((ticket, index) => {
       ticket.order = index;
@@ -64,11 +81,15 @@ export async function updateProjectTicketOrder(prevState: ActionState, projectId
   const params = {
     lists: lists,
   }
-  return baseProjectAction(fetchPatch, prevState, url, params);
+  return await baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
-export async function updateProjectListOrder(prevState: ActionState, projectId: string, lists: List[]) {
+export async function updateProjectListOrder(
+  prevState: ActionState,
+  lists: List[],
+  projectId: string
+) {
   lists.reverse().map((list, index) => {
     list.order = index;
   });
@@ -76,11 +97,14 @@ export async function updateProjectListOrder(prevState: ActionState, projectId: 
   const params = {
     lists: lists,
   }
-  return baseProjectAction(fetchPatch, prevState, url, params);
+  return await baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
-export async function updateProjectsOrder(prevState: ActionState, projects: ProjectDetail[]) {
+export async function updateProjectsOrder(
+  prevState: ActionState,
+  projects: ProjectDetail[]
+) {
   projects.reverse().map((project, index) => {
     project.order = index;
   });
@@ -88,14 +112,17 @@ export async function updateProjectsOrder(prevState: ActionState, projects: Proj
   const params = {
     projects: projects,
   }
-  return baseProjectAction(fetchPatch, prevState, url, params);
+  return await baseProjectAction(fetchPatch, prevState, url, params);
 }
 
 
-export async function deleteProject(prevState: ActionState, projectId: string) {
+export async function deleteProject(
+  prevState: ActionState,
+  projectId: string
+) {
   const url = `/tms/projects/${projectId}`;
   const params = undefined;
-  return baseProjectAction(fetchDelete, prevState, url, params);
+  return await baseProjectAction(fetchDelete, prevState, url, params);
 }
 
 
