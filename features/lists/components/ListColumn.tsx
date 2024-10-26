@@ -4,10 +4,10 @@ import { ProjectNestedData } from '@/features/projects/type';
 import { List } from '../type';
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { customClosestCorners } from '@/lib/dnd_kit/customClosestCorners';
 import { TicketCard } from '@/features/tickets/components/TicketCard';
-import { Ticket, TicketNestedData } from '@/features/tickets/type';
+import { Ticket } from '@/features/tickets/type';
 import {
   getMovedLists,
   getMovedTicketsOtherContainer,
@@ -18,39 +18,19 @@ import {
 import { ListCreateForm } from '../forms/CreateForm';
 import { ListUpdateForm } from '../forms/UpdateForm';
 import { TicketUpdateForm } from '@/features/tickets/forms/UpdateForm';
-import { getTicketNestedData } from '@/features/tickets/actions';
+import { useListModal } from '../hooks/useListModal';
+import { useTicketModal } from '../hooks/useTicketModal';
 
 
 export const OpenTicketModalContext = createContext((ticketId:string) => {});
-export const SetTicketModalDataContext = createContext((ticketId:string) => {});
+export const SetTicketNestedDataContext = createContext((ticketId:string) => {});
 
 export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedData}) {
   const [lists, setLists] = useState<List[]>(projectNestedData.lists);
   const [activeTicket, setActiveTicket] = useState<Ticket | undefined>();
 
-  const listDialog = useRef<HTMLDialogElement>(null);
-  const [listModalProps, setListModalProps] = useState<List | null>(null);
-  const handleListModalOpen = (list:List) => {
-    setListModalProps(list);
-    listDialog.current?.showModal();
-  }
-
-  const ticketDialog = useRef<HTMLDialogElement>(null);
-  const [ticketModalProps, setTicketModalProps] = useState<TicketNestedData | null>(null);
-  const setTicketNestedData = async (ticketId:string) => {
-    const ticketNestedData:TicketNestedData = await getTicketNestedData(ticketId);
-    if (ticketNestedData.from_period) {
-      ticketNestedData.from_period = new Date(ticketNestedData.from_period);
-    }
-    if (ticketNestedData.to_period) {
-      ticketNestedData.to_period = new Date(ticketNestedData.to_period);
-    }
-    setTicketModalProps(ticketNestedData);
-  };
-  const handleTicketModalOpen = (ticketId:string) => {
-    setTicketNestedData(ticketId);
-    ticketDialog.current?.showModal();
-  }
+  const { listDialog, listModalProps, handleListModalOpen } = useListModal();
+  const { ticketDialog, ticketModalProps, updateTicketModalProps ,handleTicketModalOpen, setTicketNestedData } = useTicketModal();
 
   useEffect(() => {
     if(lists === projectNestedData.lists) return;
@@ -96,9 +76,9 @@ export function ListColumn({projectNestedData}:{projectNestedData:ProjectNestedD
         <ListCreateForm projectId={projectNestedData.id} />
       </div>
       <ListUpdateForm modalProps={listModalProps} dialog={listDialog} />
-      <SetTicketModalDataContext.Provider value={setTicketNestedData}>
-        <TicketUpdateForm modalProps={ticketModalProps} setTicketModalProps={setTicketModalProps} dialog={ticketDialog} />
-      </SetTicketModalDataContext.Provider>
+      <SetTicketNestedDataContext.Provider value={setTicketNestedData}>
+        <TicketUpdateForm modalProps={ticketModalProps} updateProps={updateTicketModalProps} dialog={ticketDialog} />
+      </SetTicketNestedDataContext.Provider>
     </>
   )
 
