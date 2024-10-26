@@ -1,12 +1,12 @@
 'use server';
 
 import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
-import { ActionState } from "./type";
+import { ActionState } from "@/types/actionType";
 import { CommentSchemaType } from "./schema";
 
-function baseTicketAction(func: Function, prevState: ActionState, url: string, params: any) {
+async function baseTicketAction(func: Function, prevState: ActionState, url: string, params: any) {
   try {
-    func({
+    await func({
       url: url,
       hasToken: true,
       params: params,
@@ -20,25 +20,36 @@ function baseTicketAction(func: Function, prevState: ActionState, url: string, p
   }
 }
 
-export async function updateComment(prevState: ActionState, commentId: string, inputValues: CommentSchemaType) {
+export async function updateComment(
+  prevState: ActionState,
+  inputValues: CommentSchemaType,
+  commentId: string
+) {
   const url = `/tms/comments/${commentId}/`;
   const params = {
     text: inputValues.text,
   }
-  return baseTicketAction(fetchPatch, prevState, url, params);
+  return await baseTicketAction(fetchPatch, prevState, url, params);
 }
 
-export async function deleteComment(prevState: ActionState, commentId: string) {
+export async function deleteComment(
+  prevState: ActionState,
+  commentId: string
+) {
   const url = `/tms/comments/${commentId}/`;
   const params = undefined;
-  return baseTicketAction(fetchDelete, prevState, url, params);
+  return await baseTicketAction(fetchDelete, prevState, url, params);
 }
 
-export async function createComment(prevState: ActionState, ticketId: string, inputValues: CommentSchemaType) {
+export async function createComment(
+  prevState: ActionState,
+  inputValues: CommentSchemaType,
+  ticketId: string
+) {
   const url = `/tms/comments/`;
   const params = {
     text: inputValues.text,
     ticket: ticketId,
   }
-  return baseTicketAction(fetchPost, prevState, url, params);
+  return await baseTicketAction(fetchPost, prevState, url, params);
 }

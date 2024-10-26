@@ -2,12 +2,10 @@
 
 import React, { useContext, useRef } from 'react'
 import { CommonModal } from '@/components/modals/CommonModal'
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { ActionState } from '../type';
 import { deleteComment } from '../actions';
 import { TrashIcon } from '@/components/icons/svg/TrashIcon';
-import { SetTicketModalDataContext } from '@/features/lists/components/ListColumn';
+import { SetTicketNestedDataContext } from '@/features/lists/components/ListColumn';
+import { useActionHandler } from '@/hooks/useActionHandler';
 
 
 export function CommentDeleteForm({
@@ -18,28 +16,15 @@ export function CommentDeleteForm({
   ticketId:string,
 }){
   const dialog = useRef<HTMLDialogElement>(null);
-  const setTicketModalData = useContext(SetTicketModalDataContext);
+  const setTicketModalData = useContext(SetTicketNestedDataContext);
 
-
-  const {
-    handleSubmit,
-    formState:{ isSubmitting },
-  } = useForm();
-
-  const onSubmit = async () => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await deleteComment(initialState, commentId);
-    if(result.state === 'resolved') {
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: deleteComment,
+    onSuccess: () => {
       dialog.current?.close();
       setTicketModalData(ticketId);
     }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+  });
 
   return (
     <>
@@ -57,15 +42,14 @@ export function CommentDeleteForm({
         dialog={dialog}
         title='コメントの削除'
         text='取り消しは出来ませんが、本当に削除しますか？'
+        isSubmitting={isSubmitting}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <button
-            className='btn btn-outline btn-error btn-wide'
-            disabled={isSubmitting}
-          >
-            削除実行
-          </button>
-        </form>
+        <button
+          className='btn btn-outline btn-error btn-wide'
+          onClick={() => handleAction(commentId)}
+        >
+          削除実行
+        </button>
       </CommonModal>
     </>
   )

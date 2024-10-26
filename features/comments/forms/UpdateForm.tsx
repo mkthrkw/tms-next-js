@@ -1,14 +1,14 @@
 "use client";
 import React, { useContext } from 'react'
-import { ActionState, Comment } from '../type';
+import { Comment } from '../type';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
 import { CommentSchemaType, commentSchema } from '../schema';
 import { updateComment } from '../actions';
 import { SaveIcon } from '@/components/icons/svg/SaveIcon';
 import { CancelIcon } from '@/components/icons/svg/CancelIcon';
-import { SetTicketModalDataContext } from '@/features/lists/components/ListColumn';
+import { SetTicketNestedDataContext } from '@/features/lists/components/ListColumn';
+import { useActionHandler } from '@/hooks/useActionHandler';
 
 export function CommentUpdateForm({
   comment,
@@ -29,26 +29,19 @@ export function CommentUpdateForm({
       resolver: zodResolver(commentSchema),
   });
 
-  const setTicketModalData = useContext(SetTicketModalDataContext);
+  const setTicketModalData = useContext(SetTicketNestedDataContext);
 
-  const onSubmit = async (inputValues:CommentSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await updateComment(initialState, comment.id, inputValues);
-    if(result.state === 'resolved') {
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: updateComment,
+    onSuccess: () => {
       setTicketModalData(ticketId);
       setIsEditing(false);
     }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+  });
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit((inputValues) => handleAction(inputValues, comment.id))}>
         <textarea
           {...register('text', { value:comment.text })}
           className='text-md text-base-content w-full min-h-20 bg-base-100 resize-none focus:outline-none p-2'
@@ -68,6 +61,7 @@ export function CommentUpdateForm({
             <button
               type='submit'
               className='flex text-xs items-center font-bold text-primary group hover:text-accent'
+              disabled={isSubmitting}
             >
               <SaveIcon width={18} height={18} addClass='fill-primary/80 stroke-primary/80 group-hover:fill-accent group-hover:stroke-accent'/>
               保存

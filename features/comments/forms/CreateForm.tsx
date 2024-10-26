@@ -1,13 +1,12 @@
 "use client";
-import React from 'react'
-import { ActionState } from '../type';
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form';
 import { commentSchema, CommentSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
 import { createComment } from '../actions';
 import { PlusIcon } from '@/components/icons/svg/PlusIcon';
-import { SetTicketModalDataContext } from '@/features/lists/components/ListColumn';
+import { SetTicketNestedDataContext } from '@/features/lists/components/ListColumn';
+import { useActionHandler } from '@/hooks/useActionHandler';
 
 export function CommentCreateForm({
   ticketId,
@@ -15,38 +14,32 @@ export function CommentCreateForm({
   ticketId: string,
 }) {
 
-  const setTicketModalData = React.useContext(SetTicketModalDataContext);
+  const setTicketModalData = useContext(SetTicketNestedDataContext);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<CommentSchemaType>({
       mode: 'onBlur',
       resolver: zodResolver(commentSchema),
   });
 
-  const onSubmit = async (inputValues: CommentSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await createComment(initialState, ticketId, inputValues);
-    if(result.state === 'resolved') {
+  const { handleAction, isSubmitting} = useActionHandler({
+    action: createComment,
+    onSuccess: () => {
       reset();
       setTicketModalData(ticketId);
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+    },
+  });
+
 
   return (
     <>
       <h2 className='text-sm font-bold text-left text-base-content/50'>コメント</h2>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((inputValues) => handleAction(inputValues, ticketId))}
         className="relative flex flex-col w-full shadow-sm rounded-xl bg-base-100 justify-between border-2 border-base-content/10 focus-within:border-primary/80"
       >
         <textarea
