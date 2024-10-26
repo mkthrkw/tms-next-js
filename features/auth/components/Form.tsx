@@ -3,14 +3,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthSchemaType, authSchema } from "../schema";
-import { useLoginAction } from "../hooks/useLoginAction";
+import { useActionHandler } from "@/hooks/useActionHandler";
+import { login, redirectToNextPath } from "../actions";
+import { LoadingDots } from "@/components/common/LoadingDots";
 
 export function LoginForm() {
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<AuthSchemaType>(
     {
       mode: 'onBlur',
@@ -18,11 +20,21 @@ export function LoginForm() {
     }
   );
 
-  const { onSubmit } = useLoginAction();
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: login,
+    onSuccess: () => {
+      redirectToNextPath();
+    },
+    onSuccessMessage: 'Login success',
+  });
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+      { isSubmitting && <LoadingDots /> }
+      <form
+        onSubmit={handleSubmit((inputValue) => handleAction(inputValue))}
+        className="card-body"
+      >
         <div className="form-control">
           <label className="label">
             <span className="label-text">Email</span>
@@ -57,7 +69,7 @@ export function LoginForm() {
           </label>
         </div>
         <div className="form-control mt-6">
-          <button className="btn btn-secondary" disabled={isSubmitting}>Login</button>
+          <button className="btn btn-secondary">Login</button>
         </div>
       </form>
     </>
