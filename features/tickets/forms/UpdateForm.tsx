@@ -1,28 +1,27 @@
 "use client";
 import { CommonModal } from '@/components/modals/CommonModal';
 import React, { useEffect } from 'react'
-import { ActionState, Ticket, TicketNestedData } from '../type';
+import { TicketNestedData } from '../type';
 import { Controller, useForm } from 'react-hook-form';
 import { ticketSchema, TicketSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
-import { updateTicket } from '../actions';
 import { TicketDeleteForm } from './DeleteForm';
-import { CommentColumn } from '@/features/comment/components/CommentColumn';
+import { CommentColumn } from '@/features/comments/components/CommentColumn';
 import { DotsIcon } from '@/components/icons/svg/DotsIcon';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { dayStart, tzDate } from '@formkit/tempo';
-import { getDateOnlyShortStyle, getDateTimeFullStyle } from '@/lib/tempo/actions';
-import { CompleteBadge } from '@/components/common/CompleteBadge';
+import { getDateTimeFullStyle } from '@/lib/tempo/actions';
+import { CompleteBadge } from '@/features/tickets/components/CompleteBadge';
+import { useCompleted } from '../hooks/useCompleted';
+import { useTicketUpdate } from '../hooks/useTicketUpdate';
 
 export function TicketUpdateForm({
   modalProps,
-  setTicketModalProps,
+  updateProps,
   dialog,
 }:{
   modalProps:TicketNestedData | null,
-  setTicketModalProps:React.Dispatch<React.SetStateAction<TicketNestedData | null>>,
+  updateProps:(params:Partial<TicketNestedData>) => void,
   dialog:React.RefObject<HTMLDialogElement>
 }) {
 
@@ -38,45 +37,15 @@ export function TicketUpdateForm({
       resolver: zodResolver(ticketSchema),
   });
 
-  const initialState:ActionState = {
-    state: 'pending',
-    message: '',
-  };
 
-  const onSubmit = async (inputValues: TicketSchemaType) => {
-    if(!modalProps) return;
-
-    const changedParams = Object.entries(inputValues).find(([key,value]) => {
-      const modalProp = modalProps[key as keyof Ticket];
-      const isChangedDate = value instanceof Date && modalProp instanceof Date;
-      if(isChangedDate) {
-        return getDateOnlyShortStyle(value) !== getDateOnlyShortStyle(modalProp);
-      }
-      return value !== modalProps[key as keyof Ticket];
-    });
-
-    if(!changedParams) return;
-    if(changedParams[1] instanceof Date) {
-      changedParams[1] = tzDate(dayStart(changedParams[1]), 'UTC');
-    }
-    const params = Object.fromEntries([changedParams]);
-
-    const result = await updateTicket(initialState, modalProps.id, params);
-    if(!result) return;
-    if(result.state === 'resolved') {
-      setTicketModalProps((prev) => {
-        if(!prev) return null;
-        return {
-          ...prev,
-          ...params,
-          updated_at:new Date()
-        };
-      });
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+  const { completed, setCompleted, handleToggleCompleted } = useCompleted({
+    modalProps: modalProps,
+    updateProps: updateProps,
+  });
+  const { handleBlur } = useTicketUpdate({
+    modalProps: modalProps,
+    updateProps: updateProps,
+  })
 
   useEffect(() => {
     if(dialog.current?.open && modalProps) {
@@ -88,30 +57,6 @@ export function TicketUpdateForm({
     }
   }, [modalProps]);
 
-  const [completed, setCompleted] = React.useState(modalProps?.completed ?? false);
-  const handleToggleComplete = async (event:React.ChangeEvent<HTMLInputElement>) => {
-    const message = `このチケットを${completed ? '未完了' : '完了'}しますか？`;
-    if(!modalProps?.id || !window.confirm(message)){
-      event?.preventDefault();
-      return;
-    }
-    const result = await updateTicket(initialState, modalProps.id, {completed:!completed});
-    if(!result) return;
-    if(result.state === 'resolved') {
-      setCompleted(!completed);
-      setTicketModalProps((prev) => {
-        if(!prev) return null;
-        return {
-          ...prev,
-          completed: !completed,
-          updated_at:new Date()
-        };
-      });
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
 
   return (
     <>
@@ -126,13 +71,13 @@ export function TicketUpdateForm({
                 type="checkbox"
                 className="toggle toggle-success toggle-sm"
                 checked={completed}
-                onChange={handleToggleComplete}
+                onChange={handleToggleCompleted}
               />
-              <CompleteBadge completed={completed} />
+              <CompleteBadge completed={completed}/>
             </div>
           </div>
           <div className='flex px-4 border-b'>
-            <form onBlur={handleSubmit(onSubmit)} className="flex flex-col gap-1 w-full">
+            <form onBlur={handleSubmit(handleBlur)} className="flex flex-col gap-1 w-full">
               <input
                 {...register('title', { value:modalProps?.title })}
                 className="bg-base-100 px-2 text-xl text-base-content/70 focus:text-base-content focus:outline-none focus:border-b-2 focus:border-primary/80"

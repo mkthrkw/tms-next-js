@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Ticket } from "../type";
 import { OpenTicketModalContext } from "@/features/lists/components/ListColumn";
 import { getDateOnlyShortStyle } from "@/lib/tempo/actions";
-import { CompleteBadge } from "@/components/common/CompleteBadge";
+import { CompleteBadge } from "@/features/tickets/components/CompleteBadge";
 
 export function TicketCard({ ticket }: { ticket: Ticket }) {
 
