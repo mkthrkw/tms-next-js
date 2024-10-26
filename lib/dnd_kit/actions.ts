@@ -4,7 +4,8 @@ import {
   updateProjectsOrder,
   updateProjectTicketOrder
 } from "@/features/projects/actions";
-import { ActionState, ProjectDetail, ProjectNestedData } from "@/features/projects/type";
+import { ProjectDetail, ProjectNestedData } from "@/features/projects/type";
+import { ActionState } from "@/types/actionType";
 import { Active, Over } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { toast } from "react-toastify";
@@ -142,14 +143,14 @@ const initialState:ActionState = {
 }
 
 export async function updateMovedTickets(movedLists:List[], project_id:string) {
-  const result = await updateProjectTicketOrder(initialState, project_id, movedLists);
+  const result = await updateProjectTicketOrder(initialState, movedLists, project_id);
   if (result.state === 'rejected') {
     toast.error(result.message);
   }
 }
 
 export async function updateMovedLists(movedLists:List[], project_id:string) {
-  const result = await updateProjectListOrder(initialState, project_id, movedLists);
+  const result = await updateProjectListOrder(initialState, movedLists, project_id);
   if (result.state === 'rejected') {
     toast.error(result.message);
   }

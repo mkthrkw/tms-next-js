@@ -2,6 +2,8 @@
 import { usePathname } from 'next/navigation';
 import { ProjectDetail } from '../type';
 import Link from 'next/link';
+import defaultImg from '@/public/images/project/default.jpeg';
+
 
 export function AsideProjectCard({projectDetail}:{projectDetail:ProjectDetail}) {
   const pathName = usePathname();
@@ -17,7 +19,10 @@ export function AsideProjectCard({projectDetail}:{projectDetail:ProjectDetail}) 
     >
       <div className="avatar">
         <div className="mask mask-squircle w-10">
-          <img src={projectDetail.image_url} />
+          <img
+            src={projectDetail.image_url ?? defaultImg.src}
+            alt="avatar"
+          />
         </div>
       </div>
       <div className="flex-col ml-2">
