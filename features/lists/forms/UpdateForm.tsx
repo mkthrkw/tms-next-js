@@ -1,11 +1,9 @@
 "use client";
 import { CommonModal } from '@/components/modals/CommonModal';
 import React, { useEffect } from 'react'
-import { ActionState, List } from '../type';
 import { useForm } from 'react-hook-form';
 import { listSchema, ListSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
 import { updateList } from '../actions';
 import {
   tuttiFrutti,
@@ -14,6 +12,8 @@ import {
 } from '@/util/colors/colorPalette';
 import { ListDeleteForm } from './DeleteForm';
 import { useRouter } from 'next/navigation';
+import { useActionHandler } from '@/hooks/useActionHandler';
+import { List } from '../type';
 
 export function ListUpdateForm({
   modalProps,
@@ -27,7 +27,7 @@ export function ListUpdateForm({
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<ListSchemaType>({
       mode: 'onBlur',
       resolver: zodResolver(listSchema),
@@ -41,22 +41,14 @@ export function ListUpdateForm({
   const [colorState, setColorState] = React.useState<string>('');
 
   const router = useRouter();
-
-  const onSubmit = async (inputValues: ListSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await updateList(initialState, modalProps?.id ?? '', inputValues);
-    if(result.state === 'resolved') {
-      toast.success('Update List success');
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: updateList,
+    onSuccess: () => {
       dialog.current?.close();
       router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+    },
+    onSuccessMessage: 'Update List success',
+  });
 
   useEffect(() => {
     if(dialog.current?.open && modalProps) {
@@ -72,8 +64,12 @@ export function ListUpdateForm({
         dialog={dialog}
         title={'リストの編集'}
         addClass='overflow-hidden'
+        isSubmitting={isSubmitting}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+        <form
+          onSubmit={handleSubmit((inputValues) => handleAction(inputValues, modalProps?.id))}
+          className="flex flex-col gap-2"
+        >
           <label className="label">リスト名</label>
           <input
             {...register('title',{value:modalProps?.title})}
@@ -110,7 +106,6 @@ export function ListUpdateForm({
           </div>
           <button
             type='submit'
-            disabled={isSubmitting}
             className="w-72 btn btn-primary mt-8 text-base-100 self-center"
           >
             保存

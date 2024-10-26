@@ -1,11 +1,9 @@
 "use client";
 import { CommonModal } from '@/components/modals/CommonModal';
 import React, { useRef, useState } from 'react'
-import { ActionState, List } from '../type';
 import { useForm } from 'react-hook-form';
 import { listSchema, ListSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
 import {
   tuttiFrutti,
   retroPop,
@@ -13,6 +11,7 @@ import {
 } from '@/util/colors/colorPalette';
 import { createList } from '../actions';
 import { useRouter } from 'next/navigation';
+import { useActionHandler } from '@/hooks/useActionHandler';
 
 export function ListCreateForm({
   projectId,
@@ -24,7 +23,7 @@ export function ListCreateForm({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<ListSchemaType>({
       mode: 'onBlur',
       resolver: zodResolver(listSchema),
@@ -39,22 +38,15 @@ export function ListCreateForm({
   const [color, setColor] = useState<string>(colors[0][0]);
   const router = useRouter();
 
-  const onSubmit = async (inputValues: ListSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await createList(initialState, projectId, inputValues);
-    if(result.state === 'resolved') {
-      toast.success('Create List success');
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: createList,
+    onSuccess: () => {
       dialog.current?.close();
       reset();
       router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+    },
+    onSuccessMessage: 'Create List success',
+  });
 
   return (
     <>
@@ -69,8 +61,12 @@ export function ListCreateForm({
       <CommonModal
         dialog={dialog}
         title={'リストを追加'}
+        isSubmitting={isSubmitting}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+        <form
+          onSubmit={handleSubmit((inputValues) => handleAction(inputValues, projectId))}
+          className="flex flex-col gap-2"
+        >
           <label className="label">タイトル</label>
           <input
             {...register('title')}
@@ -107,7 +103,6 @@ export function ListCreateForm({
           </div>
           <button
             type='submit'
-            disabled={isSubmitting}
             className="w-72 btn btn-primary mt-8 text-base-100 self-center"
           >
             作成

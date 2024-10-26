@@ -2,12 +2,12 @@
 
 import { fetchDelete, fetchPatch, fetchPost } from "@/util/fetch/methods";
 import { ListSchemaType } from "./schema";
-import { ActionState } from "./type";
+import { ActionState } from "@/types/actionType";
 
 
-function baseListAction(func: Function, prevState: ActionState, url: string, params: any) {
+async function baseListAction(func: Function, prevState: ActionState, url: string, params: any) {
   try {
-    func({
+    await func({
       url: url,
       hasToken: true,
       params: params,
@@ -22,27 +22,38 @@ function baseListAction(func: Function, prevState: ActionState, url: string, par
 }
 
 
-export async function updateList(prevState: ActionState, listId: string, inputValues: ListSchemaType) {
+export async function updateList(
+  prevState: ActionState,
+  inputValues: ListSchemaType,
+  listId: string
+) {
   const url = `/tms/lists/${listId}/`;
   const params = {
     title: inputValues.title,
     color: inputValues.color,
   };
-  return baseListAction(fetchPatch, prevState, url, params);
+  return await baseListAction(fetchPatch, prevState, url, params);
 }
 
-export async function createList(prevState: ActionState, projectId: string, inputValues: ListSchemaType) {
+export async function createList(
+  prevState: ActionState,
+  inputValues: ListSchemaType,
+  projectId: string
+) {
   const url = `/tms/lists/`;
   const params = {
     title: inputValues.title,
     color: inputValues.color,
     project: projectId,
   };
-  return baseListAction(fetchPost, prevState, url, params);
+  return await baseListAction(fetchPost, prevState, url, params);
 }
 
-export async function deleteList(prevState: ActionState, listId: string) {
+export async function deleteList(
+  prevState: ActionState,
+  listId: string
+) {
   const url = `/tms/lists/${listId}`;
   const params = undefined;
-  return baseListAction(fetchDelete, prevState, url, params);
+  return await baseListAction(fetchDelete, prevState, url, params);
 }

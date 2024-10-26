@@ -3,10 +3,8 @@
 import React, { useRef } from 'react'
 import { CommonModal } from '@/components/modals/CommonModal'
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { ActionState } from '../type';
 import { deleteList } from '../actions';
+import { useActionHandler } from '@/hooks/useActionHandler';
 
 
 export function ListDeleteForm({
@@ -19,27 +17,15 @@ export function ListDeleteForm({
   const dialog = useRef<HTMLDialogElement>(null);
   const router = useRouter();
 
-  const {
-    handleSubmit,
-    formState:{ isSubmitting },
-  } = useForm();
-
-  const onSubmit = async () => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await deleteList(initialState, listId);
-    if(result.state === 'resolved') {
-      toast.success('Delete list success');
+  const { handleAction, isSubmitting} = useActionHandler({
+    action: deleteList,
+    onSuccess: () => {
       dialog.current?.close();
       underDialog.current?.close();
       router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+    },
+    onSuccessMessage: 'Delete List success',
+  });
 
   return (
     <>
@@ -54,15 +40,14 @@ export function ListDeleteForm({
         title='リストの削除'
         text='取り消しは出来ませんが、本当に削除しますか？'
         addClass='w-fit'
+        isSubmitting={isSubmitting}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <button
-            className='btn btn-outline btn-error btn-wide'
-            disabled={isSubmitting}
-          >
-            削除実行
-          </button>
-        </form>
+        <button
+          className='btn btn-outline btn-error btn-wide'
+          onClick={() => handleAction(listId)}
+        >
+          削除実行
+        </button>
       </CommonModal>
     </>
   )
