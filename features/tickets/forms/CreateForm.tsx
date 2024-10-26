@@ -1,7 +1,5 @@
 "use client";
-import { CommonModal } from '@/components/modals/CommonModal';
-import React, { useRef, useState } from 'react'
-import { ActionState } from '../type';
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { ticketSchema, TicketSchemaType } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +7,8 @@ import { toast } from 'react-toastify';
 import { createTicket } from '../actions';
 import { useRouter } from 'next/navigation';
 import { EditPen } from '@/components/icons/svg/EditPen';
-import { set } from 'zod';
+import { useActionHandler } from '@/hooks/useActionHandler';
+import { LoadingDots } from '@/components/common/LoadingDots';
 
 export function TicketCreateForm({
   listId,
@@ -21,7 +20,7 @@ export function TicketCreateForm({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<TicketSchemaType>({
       mode: 'onBlur',
       resolver: zodResolver(ticketSchema),
@@ -30,25 +29,19 @@ export function TicketCreateForm({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onSubmit = async (inputValues: TicketSchemaType) => {
-    const initialState:ActionState = {
-      state: 'pending',
-      message: '',
-    }
-    const result = await createTicket(initialState, listId, inputValues);
-    if(result.state === 'resolved') {
+  const { handleAction, isSubmitting } = useActionHandler({
+    action: createTicket,
+    onSuccess: () => {
       setIsOpen(false);
       toast.success('Create Ticket success');
       reset();
       router.refresh();
-    }
-    if (result.state === 'rejected') {
-      toast.error(result.message,{autoClose: 3000});
-    }
-  }
+    },
+  });
 
   return (
     <>
+      { isSubmitting && <LoadingDots /> }
       <div className='px-4'>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -60,7 +53,7 @@ export function TicketCreateForm({
       {isOpen && (
         <div className='px-2 mt-2'>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit((inputValues) => handleAction(inputValues, listId))}
             className="flex text-left w-full shadow-sm rounded-xl px-2 py-1 bg-base-100 text-base-content h-16 items-center justify-between gap-4"
           >
             <div className='flex flex-col w-full'>
@@ -72,7 +65,6 @@ export function TicketCreateForm({
             </div>
             <button
               type='submit'
-              disabled={isSubmitting}
               className="hover:bg-accent hover:cursor-pointer rounded-xl p-1 border-2 border-primary/50"
             >
               <EditPen width={18} height={18} addClass='fill-primary/50 stroke-primary/50'/>

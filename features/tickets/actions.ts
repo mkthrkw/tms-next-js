@@ -2,12 +2,12 @@
 
 import { fetchDelete, fetchGet, fetchPatch, fetchPost } from "@/util/fetch/methods";
 import { TicketSchemaType } from "./schema";
-import { ActionState } from "./type";
+import { ActionState } from "@/types/actionType";
 
 
 async function baseTicketAction(func: Function, prevState: ActionState, url: string, params: any) {
   try {
-    const response = await func({
+    await func({
       url: url,
       hasToken: true,
       params: params,
@@ -21,8 +21,22 @@ async function baseTicketAction(func: Function, prevState: ActionState, url: str
   }
 }
 
-export async function updateTicket(prevState: ActionState, ticketId: string, params: any) {
+export async function updateTicket(
+  prevState: ActionState,
+  params: Partial<TicketSchemaType>,
+  ticketId: string,
+) {
   const url = `/tms/tickets/${ticketId}/`;
+  return await baseTicketAction(fetchPatch, prevState, url, params);
+}
+
+export async function updateTicketCompleted(
+  prevState: ActionState,
+  completed: boolean,
+  ticketId: string
+) {
+  const url = `/tms/tickets/${ticketId}/`;
+  const params = { completed: completed };
   return await baseTicketAction(fetchPatch, prevState, url, params);
 }
 
@@ -33,7 +47,11 @@ export async function deleteTicket(prevState: ActionState, ticketId: string) {
   return await baseTicketAction(fetchDelete, prevState, url, params);
 }
 
-export async function createTicket(prevState: ActionState, listId: string, inputValues: TicketSchemaType) {
+export async function createTicket(
+  prevState: ActionState,
+  inputValues: TicketSchemaType,
+  listId: string
+) {
   const url = `/tms/tickets/`;
   const params = {
     title: inputValues.title,
