@@ -27,7 +27,7 @@ export default function NextodoLayout({
             <Footer/>
           </div>
           {/* ===== Drawer side ===== */}
-          <div className="drawer-side z-40">
+          <div className="drawer-side z-10">
             <label htmlFor={drawerId} aria-label="close sidebar" className="drawer-overlay"></label>
             <Aside/>
           </div>

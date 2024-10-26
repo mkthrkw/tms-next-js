@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { LoadingDots } from "../common/LoadingDots";
 
 export function CommonModal({
   children,
@@ -6,12 +7,14 @@ export function CommonModal({
   title,
   text,
   addClass,
+  isSubmitting,
 }:{
   children: React.ReactNode,
   dialog: React.RefObject<HTMLDialogElement>,
   title?: string,
   text?: string,
   addClass?: string,
+  isSubmitting?: boolean,
 }) {
   const router = useRouter();
   const closeHandler = () => {
@@ -21,6 +24,7 @@ export function CommonModal({
 
   return (
     <dialog className="modal w-screen h-screen" ref={dialog}>
+      { isSubmitting && <LoadingDots /> }
       <div className={"modal-box text-center text-base-content bg-base-100 border-base-content border" + ' ' + addClass}>
         { title && (
           <h3 className="font-bold text-lg mb-4">{ title }</h3>
