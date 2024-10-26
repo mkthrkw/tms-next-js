@@ -18,9 +18,9 @@ export async function login(prevState: ActionState ,data: AuthSchemaType) {
       },
       customErrorMessage: getLoginCustomErrorMessage(),
     });
-    setToken(response.access);
+    await setToken(response.access);
     if(data.rememberMe) {
-      setRefreshToken(response.refresh);
+      await setRefreshToken(response.refresh);
     }
     prevState.state = 'resolved';
     return prevState;
@@ -34,21 +34,20 @@ export async function login(prevState: ActionState ,data: AuthSchemaType) {
 
 export async function refreshLogin(refreshToken: string) {
   try {
-    const response = await fetchPost({
+    return await fetchPost({
       url: '/auth/token/refresh/',
       params: {
         refresh: refreshToken,
       },
     });
-    return response;
   } catch (error: any) {
     return false;
   }
 }
 
 export async function logout(prevState: ActionState) {
-  removeToken();
-  removeRefreshToken();
+  await removeToken();
+  await removeRefreshToken();
   redirect('/login');
 }
 
